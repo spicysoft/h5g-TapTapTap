@@ -16,10 +16,12 @@ var Main = (function (_super) {
         return _this;
     }
     Main.prototype.addToStage = function () {
-        egret.startTick(this.tickLoop, this);
+        GameObject.Init(this.stage);
         MainGame.Init(this.stage);
+        egret.startTick(this.tickLoop, this);
     };
     Main.prototype.tickLoop = function (timeStamp) {
+        GameObject.UpdateAll();
         return false;
     };
     return Main;
@@ -29,33 +31,40 @@ var MainGame = (function () {
     function MainGame() {
     }
     MainGame.Init = function (Stage) {
-        MainGame.Target = this;
         MainGame.Height = egret.MainContext.instance.stage.stageHeight;
         MainGame.Width = egret.MainContext.instance.stage.stageWidth;
         MainGame.MainStage = Stage;
-        new BackGround();
-        new TapTarget(200, 200);
+        new GameManager();
+        new BackGround(0, 0, MainGame.Width, MainGame.Height);
     };
     return MainGame;
 }());
 __reflect(MainGame.prototype, "MainGame");
 var BackGround = (function (_super) {
     __extends(BackGround, _super);
-    function BackGround() {
+    function BackGround(SetPosX, SetPosY, SetWidth, SetHeight) {
+        return _super.call(this, SetPosX, SetPosY, SetWidth, SetHeight) || this;
+    }
+    return BackGround;
+}(Rect));
+__reflect(BackGround.prototype, "BackGround");
+var GameManager = (function (_super) {
+    __extends(GameManager, _super);
+    function GameManager() {
         var _this = _super.call(this) || this;
-        _this.Init();
-        var BG = new Rect(_this.Width / 2, _this.Height / 2, _this.Width, _this.Height);
-        BG.Draw();
+        var Time = new egret.Timer(500, 0);
+        Time.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
+        Time.start();
         return _this;
     }
-    BackGround.prototype.Init = function () {
-        BackGround.Display = new egret.DisplayObjectContainer();
-        MainGame.MainStage.addChild(BackGround.Display);
-        this.Height = egret.MainContext.instance.stage.stageHeight;
-        this.Width = egret.MainContext.instance.stage.stageWidth;
+    GameManager.prototype.Update = function () { };
+    ;
+    GameManager.prototype.OnDestroy = function () { };
+    ;
+    GameManager.prototype.EmitTarget = function () {
+        new TapTarget(MainGame.Width / 2, MainGame.Height);
     };
-    BackGround.Display = null;
-    return BackGround;
-}(egret.DisplayObjectContainer));
-__reflect(BackGround.prototype, "BackGround");
+    return GameManager;
+}(GameObject));
+__reflect(GameManager.prototype, "GameManager");
 //# sourceMappingURL=Main.js.map

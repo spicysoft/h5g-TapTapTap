@@ -8,56 +8,58 @@ class Main extends eui.UILayer
  
     private addToStage() 
     {
-        egret.startTick(this.tickLoop, this);
+        GameObject.Init(this.stage);
         MainGame.Init(this.stage);
+        egret.startTick(this.tickLoop, this);
     }
  
     tickLoop(timeStamp:number):boolean
     {
+        GameObject.UpdateAll();
         return false;
     }
 }
  
 class MainGame{
  
-    static Target : MainGame;
     static MainStage: egret.Stage;
     static Height: number;
     static Width: number;
  
     static Init(Stage:egret.Stage)
      {
-        MainGame.Target = this;
         MainGame.Height = egret.MainContext.instance.stage.stageHeight;
         MainGame.Width  = egret.MainContext.instance.stage.stageWidth;
         MainGame.MainStage = Stage;
-
-        new BackGround();
-        new TapTarget(200,200);    
+        new GameManager();
+        new BackGround(0,0,MainGame.Width,MainGame.Height);
     }
- 
 }
 
- class BackGround extends egret.DisplayObjectContainer
+ class BackGround extends Rect
  {
-    private  Height: number;
-    private  Width: number;
-
-    static Display : egret.DisplayObjectContainer=null;
-
-     constructor()
+     constructor(SetPosX:number,SetPosY:number,SetWidth:number,SetHeight:number)
      {
-        super();
-        this.Init();
-        let BG :Rect = new Rect(this.Width/2,this.Height/2,this.Width,this.Height);
-        BG.Draw();
+        super(SetPosX,SetPosY,SetWidth,SetHeight);
      }
+ }
 
-     Init()
-     {
-         BackGround.Display=new egret.DisplayObjectContainer();
-         MainGame.MainStage.addChild(BackGround.Display);
-        this.Height = egret.MainContext.instance.stage.stageHeight;
-        this.Width  = egret.MainContext.instance.stage.stageWidth;
-     }
+ class GameManager extends GameObject
+ {
+	constructor()
+	{
+		super();
+        const Time:egret.Timer=new egret.Timer(500,0);
+        Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
+        Time.start();
+	}
+
+	Update(){};
+
+	OnDestroy(){};
+
+    private EmitTarget()
+    {
+        new TapTarget(MainGame.Width/2,MainGame.Height); 
+    }
  }

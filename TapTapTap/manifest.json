@@ -9,7 +9,7 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
-		"bin-debug/Main.js",
-		"bin-debug/TapTarget.js"
+		"bin-debug/TapTarget.js",
+		"bin-debug/Main.js"
 	]
 }

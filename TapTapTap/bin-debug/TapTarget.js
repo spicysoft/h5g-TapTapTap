@@ -8,22 +8,34 @@ var __extends = this && this.__extends || function __extends(t, e) {
 for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
 r.prototype = e.prototype, t.prototype = new r();
 };
-var GameObject = (function (_super) {
-    __extends(GameObject, _super);
+var GameObject = (function () {
     function GameObject() {
-        var _this = _super.call(this) || this;
-        _this.Object = null;
-        _this.Init();
-        return _this;
-    }
-    GameObject.prototype.Init = function () {
+        this.DestroyFlag = false;
+        this.Shape = null;
+        this.Object = null;
         this.Object = new egret.DisplayObjectContainer();
-        BackGround.Display.addChild(this.Object);
         GameObject.Objects.push(this);
+        GameObject.Display.addChild(this.Object);
+    }
+    GameObject.Init = function (TargetDisplayOC) {
+        GameObject.Objects = [];
+        GameObject.Display = TargetDisplayOC;
+    };
+    GameObject.UpdateAll = function () {
+        GameObject.Objects.forEach(function (Obj) { return Obj.Update(); });
+        GameObject.Objects = GameObject.Objects.filter(function (Obj) {
+            if (Obj.DestroyFlag == true) {
+                Obj.delete();
+            }
+            return (!Obj.DestroyFlag);
+        });
+    };
+    GameObject.prototype.delete = function () {
+        this.OnDestroy();
     };
     GameObject.Objects = [];
     return GameObject;
-}(egret.DisplayObjectContainer));
+}());
 __reflect(GameObject.prototype, "GameObject");
 var Circle = (function (_super) {
     __extends(Circle, _super);
@@ -36,14 +48,21 @@ var Circle = (function (_super) {
         this.PosX = 150;
         this.PosY = 150;
         this.Shape = new egret.Shape();
+        this.Object.addChild(this.Shape);
     };
     Circle.prototype.Draw = function () {
         var Graphics = this.Shape.graphics;
+        Graphics.clear();
         Graphics.beginFill(0xffff00);
         Graphics.drawCircle(this.PosX, this.PosY, 100);
         Graphics.endFill();
-        this.Object.addChild(this.Shape);
     };
+    Circle.prototype.Update = function () {
+        this.Draw();
+    };
+    ;
+    Circle.prototype.OnDestroy = function () { };
+    ;
     return Circle;
 }(GameObject));
 __reflect(Circle.prototype, "Circle");
@@ -64,14 +83,21 @@ var Rect = (function (_super) {
         this.Height = 0;
         this.PosX = 0;
         this.PosY = 0;
+        GameObject.Display.addChild(this.Shape);
     };
     Rect.prototype.Draw = function () {
         var Graphics = this.Shape.graphics;
+        Graphics.clear();
         Graphics.beginFill(0x0000ff);
-        Graphics.drawRect(this.PosX, this.PosY, this.width, this.height);
+        Graphics.drawRect(this.PosX, this.PosY, this.Width, this.Height);
         Graphics.endFill();
-        this.Object.addChild(this.Shape);
     };
+    Rect.prototype.Update = function () {
+        this.Draw();
+    };
+    ;
+    Rect.prototype.OnDestroy = function () { };
+    ;
     return Rect;
 }(GameObject));
 __reflect(Rect.prototype, "Rect");
@@ -82,6 +108,7 @@ var TapTarget = (function (_super) {
         _this.TargetInit();
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
+        _this.PosX = TapTarget.GetRandomInt(100, 620);
         _this.Draw();
         return _this;
     }
@@ -92,7 +119,28 @@ var TapTarget = (function (_super) {
         this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
     };
     TapTarget.prototype.TapEvent = function () {
-        console.log("TAP!!!!");
+        egret.log("TAP!!!!");
+        this.DestroyFlag = true;
+    };
+    TapTarget.prototype.Update = function () {
+        if (this.PosY > 200) {
+            this.PosY -= 10.0;
+        }
+        else {
+            this.DestroyFlag = true;
+            return;
+        }
+        this.Draw();
+    };
+    ;
+    TapTarget.prototype.OnDestroy = function () {
+        this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.removeChild(this.Shape);
+        this.Shape = null;
+    };
+    ;
+    TapTarget.GetRandomInt = function (Min, Max) {
+        return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
     };
     return TapTarget;
 }(Circle));
