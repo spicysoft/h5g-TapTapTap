@@ -7,56 +7,124 @@
  
  class GameManager extends GameObject
  {
-	private static NowStatus : GameStatus =GameStatus.MainGame;
-	private static Score :number = 0;
+	private NowStatus : GameStatus =GameStatus.MainGame;
+	private Score :number = 0;
 	private ScoreTex:TextComp=null;
+	private EmitTime:number =500;
+	private EmitCount:number =0;
+	private Time:egret.Timer;
+	private static Instance:GameManager=null;
+
+	public static GetInstance():GameManager
+	{
+		if(GameManager.Instance==null)
+		{
+			GameManager.Instance==new GameManager();
+		}
+		return GameManager.Instance;
+	}
 
 	constructor()
 	{
 		super();
-		const Time:egret.Timer=new egret.Timer(500,0);
-        Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
-        Time.start();
+		GameManager.Instance=this;
+		this.Time=new egret.Timer(this.EmitTime,0);
+        this.Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
 		this.GameInit();
+		this.Shape = new egret.Shape();
+		this.Object.touchEnabled=true;
+		GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 	}
 
 	private GameInit()
 	{
-		GameManager.NowStatus =GameStatus.MainGame;
-		GameManager.Score=0;
+		this.NowStatus =GameStatus.Title;
+		this.Score=0;
+		this.EmitTime=500;
+		this.EmitCount=0;
+		this.Time.delay=this.EmitTime;
 		GameObject.DestroyAll();
 		this.ScoreTex=new TextComp(0,0,"SCORE:0",100,0.5,0.5,0x00ffff,true);
 	}
 
 	Update()
 	{
-		this.ScoreTex.SetText("SCORE:"+GameManager.Score.toFixed());
+		this.ScoreTex.SetText("SCORE:"+this.Score.toFixed());
 	};
 
 	OnDestroy(){};
 
 	Draw(){};
 
-	static AddScore(AddValue:number)
+	private ResetGame()
 	{
-		GameManager.Score+=AddValue;
+		if(this.NowStatus!=GameStatus.Result)
+		{
+		  GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
+		  return;
+		}
+		GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
+		GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
+		this.GameInit();
 	}
 
-	static GetGameStatus():GameStatus
+	private GameStart()
 	{
-		return GameManager.NowStatus;
+		if(this.NowStatus!=GameStatus.Title)
+		{
+		  GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
+		  return;
+		}
+		GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
+		this.NowStatus=GameStatus.MainGame;
+        this.Time.start();
+	}
+
+	public AddScore(AddValue:number)
+	{
+		this.Score+=AddValue;
+	}
+
+	 public GetGameStatus():GameStatus
+	{
+		return this.NowStatus;
 	};
 
-	static SetGameStatus(Status:GameStatus)
+	public SetGameStatus(Status:GameStatus)
 	{
-		GameManager.NowStatus+=Status;
+		if(Status==GameStatus.Result)
+		{
+		GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
+		}
+		this.NowStatus=Status;
 	}
 
     private EmitTarget()
     {
-		if(GameManager.NowStatus==GameStatus.MainGame)
+		if(this.NowStatus!=GameStatus.MainGame)
+		{
+			return;
+		}
+
+		if(GameManager.GetRandomInt(1,2)%2==1)
 		{
 			new TapTarget(MainGame.Width/2,MainGame.Height); 
 		}
+		else
+		{
+			new DummyTarget(MainGame.Width/2,MainGame.Height); 
+		}
+		
+		this.EmitCount++;
+
+		if(this.EmitCount>=10)
+		{
+			this.Time.delay = this.Time.delay>100 ? this.Time.delay-20:this.Time.delay;
+		}
+    }
+
+	    static GetRandomInt(Min:number, Max:number):number 
+	{
+        return Math.floor( Min + Math.random() * (Max+0.999 - Min) );
     }
  }

@@ -18,44 +18,93 @@ var GameManager = (function (_super) {
     __extends(GameManager, _super);
     function GameManager() {
         var _this = _super.call(this) || this;
+        _this.NowStatus = GameStatus.MainGame;
+        _this.Score = 0;
         _this.ScoreTex = null;
-        var Time = new egret.Timer(500, 0);
-        Time.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
-        Time.start();
+        _this.EmitTime = 500;
+        _this.EmitCount = 0;
+        GameManager.Instance = _this;
+        _this.Time = new egret.Timer(_this.EmitTime, 0);
+        _this.Time.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
         _this.GameInit();
+        _this.Shape = new egret.Shape();
+        _this.Object.touchEnabled = true;
+        GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.GameStart, _this);
         return _this;
     }
+    GameManager.GetInstance = function () {
+        if (GameManager.Instance == null) {
+            GameManager.Instance == new GameManager();
+        }
+        return GameManager.Instance;
+    };
     GameManager.prototype.GameInit = function () {
-        GameManager.NowStatus = GameStatus.MainGame;
-        GameManager.Score = 0;
+        this.NowStatus = GameStatus.Title;
+        this.Score = 0;
+        this.EmitTime = 500;
+        this.EmitCount = 0;
+        this.Time.delay = this.EmitTime;
         GameObject.DestroyAll();
         this.ScoreTex = new TextComp(0, 0, "SCORE:0", 100, 0.5, 0.5, 0x00ffff, true);
     };
     GameManager.prototype.Update = function () {
-        this.ScoreTex.SetText("SCORE:" + GameManager.Score.toFixed());
+        this.ScoreTex.SetText("SCORE:" + this.Score.toFixed());
     };
     ;
     GameManager.prototype.OnDestroy = function () { };
     ;
     GameManager.prototype.Draw = function () { };
     ;
-    GameManager.AddScore = function (AddValue) {
-        GameManager.Score += AddValue;
+    GameManager.prototype.ResetGame = function () {
+        if (this.NowStatus != GameStatus.Result) {
+            GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
+            return;
+        }
+        GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
+        GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
+        this.GameInit();
     };
-    GameManager.GetGameStatus = function () {
-        return GameManager.NowStatus;
+    GameManager.prototype.GameStart = function () {
+        if (this.NowStatus != GameStatus.Title) {
+            GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
+            return;
+        }
+        GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
+        this.NowStatus = GameStatus.MainGame;
+        this.Time.start();
+    };
+    GameManager.prototype.AddScore = function (AddValue) {
+        this.Score += AddValue;
+    };
+    GameManager.prototype.GetGameStatus = function () {
+        return this.NowStatus;
     };
     ;
-    GameManager.SetGameStatus = function (Status) {
-        GameManager.NowStatus += Status;
+    GameManager.prototype.SetGameStatus = function (Status) {
+        if (Status == GameStatus.Result) {
+            GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
+        }
+        this.NowStatus = Status;
     };
     GameManager.prototype.EmitTarget = function () {
-        if (GameManager.NowStatus == GameStatus.MainGame) {
+        if (this.NowStatus != GameStatus.MainGame) {
+            return;
+        }
+        if (GameManager.GetRandomInt(1, 2) % 2 == 1) {
             new TapTarget(MainGame.Width / 2, MainGame.Height);
         }
+        else {
+            new DummyTarget(MainGame.Width / 2, MainGame.Height);
+        }
+        this.EmitCount++;
+        if (this.EmitCount >= 10) {
+            this.Time.delay = this.Time.delay > 100 ? this.Time.delay - 20 : this.Time.delay;
+        }
     };
-    GameManager.NowStatus = GameStatus.MainGame;
-    GameManager.Score = 0;
+    GameManager.GetRandomInt = function (Min, Max) {
+        return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
+    };
+    GameManager.Instance = null;
     return GameManager;
 }(GameObject));
 __reflect(GameManager.prototype, "GameManager");

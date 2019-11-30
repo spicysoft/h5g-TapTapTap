@@ -16,6 +16,7 @@ var TapTarget = (function (_super) {
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
         _this.PosX = TapTarget.GetRandomInt(100, 620);
+        _this.Speed = TapTarget.GetRandomInt(5.0, 15.0);
         _this.Draw();
         return _this;
     }
@@ -26,24 +27,24 @@ var TapTarget = (function (_super) {
         this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
     };
     TapTarget.prototype.TapEvent = function () {
-        if (GameManager.GetGameStatus() != GameStatus.MainGame) {
+        if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
             this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
-        GameManager.AddScore(100);
+        GameManager.GetInstance().AddScore(100);
         this.DestroyFlag = true;
     };
     TapTarget.prototype.Update = function () {
-        if (GameManager.GetGameStatus() != GameStatus.MainGame) {
+        if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
             return;
         }
         if (this.PosY > 200) {
-            this.PosY -= 10.0;
+            this.PosY -= this.Speed;
         }
         else {
             //this.DestroyFlag=true;
-            GameManager.SetGameStatus(GameStatus.Result);
+            GameManager.GetInstance().SetGameStatus(GameStatus.Result);
             return;
         }
     };
@@ -68,6 +69,7 @@ var DummyTarget = (function (_super) {
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
         _this.PosX = TapTarget.GetRandomInt(100, 620);
+        _this.Speed = TapTarget.GetRandomInt(5.0, 15.0);
         _this.Draw();
         return _this;
     }
@@ -78,24 +80,25 @@ var DummyTarget = (function (_super) {
         this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
     };
     DummyTarget.prototype.TapEvent = function () {
-        if (GameManager.GetGameStatus() != GameStatus.MainGame) {
+        if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
             this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
-        GameManager.SetGameStatus(GameStatus.Result);
+        GameManager.GetInstance().SetGameStatus(GameStatus.Result);
         this.DestroyFlag = true;
     };
     DummyTarget.prototype.Update = function () {
-        if (GameManager.GetGameStatus() != GameStatus.MainGame) {
+        if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
             return;
         }
         if (this.PosY > 200) {
-            this.PosY -= 10.0;
+            this.PosY -= this.Speed;
         }
         else {
-            //this.DestroyFlag=true;
-            GameManager.SetGameStatus(GameStatus.Result);
+            //ダミーマトの場合は加算する
+            this.DestroyFlag = true;
+            GameManager.GetInstance().AddScore(100);
             return;
         }
     };

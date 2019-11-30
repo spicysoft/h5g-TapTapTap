@@ -3,7 +3,7 @@ class TapTarget extends Circle
 {
 	public Height: number;
     public Width: number;
-
+	private Speed:number;
 
 	public constructor(SetPosX:number,SetPosY:number) 
 	{
@@ -13,6 +13,7 @@ class TapTarget extends Circle
 		this.PosY=SetPosY;
 
 		this.PosX=TapTarget.GetRandomInt(100,620);
+		this.Speed=TapTarget.GetRandomInt(5.0,15.0);
 		this.Draw();
 	}
 
@@ -26,30 +27,30 @@ class TapTarget extends Circle
 
 	TapEvent()
 	{
-		if(GameManager.GetGameStatus()!=GameStatus.MainGame)
+		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
 		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
-		GameManager.AddScore(100);
+		GameManager.GetInstance().AddScore(100);
 		this.DestroyFlag=true;
 	}
 
 	Update()
 	{
-		if(GameManager.GetGameStatus()!=GameStatus.MainGame)
+		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
 			return;
 		}
 		if(this.PosY>200)
 		{
-			this.PosY-=10.0;
+			this.PosY-=this.Speed;
 		}
 		else
 		{
 			//this.DestroyFlag=true;
-			GameManager.SetGameStatus(GameStatus.Result);
+			GameManager.GetInstance().SetGameStatus(GameStatus.Result);
 			return;
 		}
 	};
@@ -71,7 +72,7 @@ class DummyTarget extends Circle
 {
 	public Height: number;
     public Width: number;
-
+	private Speed:number;
 
 	public constructor(SetPosX:number,SetPosY:number) 
 	{
@@ -81,6 +82,7 @@ class DummyTarget extends Circle
 		this.PosY=SetPosY;
 
 		this.PosX=TapTarget.GetRandomInt(100,620);
+		this.Speed=TapTarget.GetRandomInt(5.0,15.0);
 		this.Draw();
 	}
 
@@ -94,30 +96,31 @@ class DummyTarget extends Circle
 
 	TapEvent()
 	{
-		if(GameManager.GetGameStatus()!=GameStatus.MainGame)
+		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
 		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
-		GameManager.SetGameStatus(GameStatus.Result);
+		GameManager.GetInstance().SetGameStatus(GameStatus.Result);
 		this.DestroyFlag=true;
 	}
 
 	Update()
 	{
-		if(GameManager.GetGameStatus()!=GameStatus.MainGame)
+		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
 			return;
 		}
 		if(this.PosY>200)
 		{
-			this.PosY-=10.0;
+			this.PosY-=this.Speed;
 		}
 		else
 		{
-			//this.DestroyFlag=true;
-			GameManager.SetGameStatus(GameStatus.Result);
+			//ダミーマトの場合は加算する
+			this.DestroyFlag=true;
+			GameManager.GetInstance().AddScore(100);
 			return;
 		}
 	};
