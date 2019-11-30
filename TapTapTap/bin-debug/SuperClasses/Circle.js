@@ -30,7 +30,9 @@ var Circle = (function (_super) {
     };
     Circle.prototype.Update = function () { };
     ;
-    Circle.prototype.OnDestroy = function () { };
+    Circle.prototype.OnDestroy = function () {
+        this.Object.removeChild(this.Shape);
+    };
     ;
     return Circle;
 }(GameObject));

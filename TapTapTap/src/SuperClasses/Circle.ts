@@ -28,5 +28,8 @@ class Circle extends GameObject
 
 	Update(){};
 
-	OnDestroy(){};
+	OnDestroy()
+	{
+	  this.Object.removeChild(this.Shape);
+	};
 }

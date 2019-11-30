@@ -31,9 +31,8 @@
 		this.Time=new egret.Timer(this.EmitTime,0);
         this.Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
 		this.GameInit();
-		this.Shape = new egret.Shape();
 		this.Object.touchEnabled=true;
-		GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
+		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 	}
 
 	private GameInit()
@@ -58,24 +57,12 @@
 
 	private ResetGame()
 	{
-		if(this.NowStatus!=GameStatus.Result)
-		{
-		  GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
-		  return;
-		}
-		GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
-		GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
+		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 		this.GameInit();
 	}
 
 	private GameStart()
 	{
-		if(this.NowStatus!=GameStatus.Title)
-		{
-		  GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
-		  return;
-		}
-		GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 		this.NowStatus=GameStatus.MainGame;
         this.Time.start();
 	}
@@ -94,7 +81,7 @@
 	{
 		if(Status==GameStatus.Result)
 		{
-		GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
+		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
 		}
 		this.NowStatus=Status;
 	}

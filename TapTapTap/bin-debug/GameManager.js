@@ -27,9 +27,8 @@ var GameManager = (function (_super) {
         _this.Time = new egret.Timer(_this.EmitTime, 0);
         _this.Time.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
         _this.GameInit();
-        _this.Shape = new egret.Shape();
         _this.Object.touchEnabled = true;
-        GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.GameStart, _this);
+        GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN, _this.GameStart, _this);
         return _this;
     }
     GameManager.GetInstance = function () {
@@ -56,20 +55,10 @@ var GameManager = (function (_super) {
     GameManager.prototype.Draw = function () { };
     ;
     GameManager.prototype.ResetGame = function () {
-        if (this.NowStatus != GameStatus.Result) {
-            GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
-            return;
-        }
-        GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
-        GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
+        GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
         this.GameInit();
     };
     GameManager.prototype.GameStart = function () {
-        if (this.NowStatus != GameStatus.Title) {
-            GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
-            return;
-        }
-        GameObject.Display.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.GameStart, this);
         this.NowStatus = GameStatus.MainGame;
         this.Time.start();
     };
@@ -82,7 +71,7 @@ var GameManager = (function (_super) {
     ;
     GameManager.prototype.SetGameStatus = function (Status) {
         if (Status == GameStatus.Result) {
-            GameObject.Display.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
+            GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
         }
         this.NowStatus = Status;
     };
