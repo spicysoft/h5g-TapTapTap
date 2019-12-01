@@ -43,7 +43,8 @@ var GameManager = (function (_super) {
         this.EmitTime = 500;
         this.EmitCount = 0;
         this.Time.delay = this.EmitTime;
-        GameObject.DestroyAll();
+        var Targets = GameObject.FindObjects("Target");
+        Targets.forEach(function (Obj) { return Obj.Destroy(); });
         this.ScoreTex = new TextComp(0, 0, "SCORE:0", 100, 0.5, 0.5, 0x00ffff, true);
     };
     GameManager.prototype.Update = function () {

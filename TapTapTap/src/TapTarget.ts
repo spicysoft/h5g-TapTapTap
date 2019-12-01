@@ -4,10 +4,17 @@ class TapTarget extends Circle
 	public Height: number;
     public Width: number;
 	private Speed:number;
+	private Image:eui.Image;
 
 	public constructor(SetPosX:number,SetPosY:number) 
 	{
 		super();
+		this.Tag="Target";
+		let LoadImage :eui.Image=new eui.Image();
+		LoadImage.source="resource/Target1.png";
+		this.Image=LoadImage;
+		this.Object.addChild(this.Image);
+		
 		this.TargetInit();
 		this.PosX=SetPosX;
 		this.PosY=SetPosY;
@@ -58,8 +65,12 @@ class TapTarget extends Circle
 	OnDestroy()
 	{
 		this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
-		this.Object.removeChild(this.Shape);
-		this.Shape = null;
+		if( this.Image!=null )
+		{
+			this.Object.removeChild(this.Image);
+			this.Image = null;
+		}
+		super.OnDestroy();
 	};
 
     static GetRandomInt(Min:number, Max:number):number 
@@ -73,10 +84,17 @@ class DummyTarget extends Circle
 	public Height: number;
     public Width: number;
 	private Speed:number;
-
+	private Image:eui.Image;
 	public constructor(SetPosX:number,SetPosY:number) 
 	{
 		super();
+		this.Tag="Target";
+
+		let LoadImage :eui.Image=new eui.Image();
+		LoadImage.source="resource/Target2.png";
+		this.Image=LoadImage;
+		this.Object.addChild(this.Image);
+
 		this.TargetInit();
 		this.PosX=SetPosX;
 		this.PosY=SetPosY;
@@ -128,8 +146,13 @@ class DummyTarget extends Circle
 	OnDestroy()
 	{
 		this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
-		this.Object.removeChild(this.Shape);
-		this.Shape = null;
+		if( this.Image!=null )
+		{
+			this.Object.removeChild(this.Image);
+			this.Image = null;
+		}
+
+		super.OnDestroy();
 	};
 
     static GetRandomInt(Min:number, Max:number):number 

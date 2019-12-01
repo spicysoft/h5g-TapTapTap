@@ -12,6 +12,11 @@ var TapTarget = (function (_super) {
     __extends(TapTarget, _super);
     function TapTarget(SetPosX, SetPosY) {
         var _this = _super.call(this) || this;
+        _this.Tag = "Target";
+        var LoadImage = new eui.Image();
+        LoadImage.source = "resource/Target1.png";
+        _this.Image = LoadImage;
+        _this.Object.addChild(_this.Image);
         _this.TargetInit();
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
@@ -51,8 +56,11 @@ var TapTarget = (function (_super) {
     ;
     TapTarget.prototype.OnDestroy = function () {
         this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
-        this.Object.removeChild(this.Shape);
-        this.Shape = null;
+        if (this.Image != null) {
+            this.Object.removeChild(this.Image);
+            this.Image = null;
+        }
+        _super.prototype.OnDestroy.call(this);
     };
     ;
     TapTarget.GetRandomInt = function (Min, Max) {
@@ -65,6 +73,11 @@ var DummyTarget = (function (_super) {
     __extends(DummyTarget, _super);
     function DummyTarget(SetPosX, SetPosY) {
         var _this = _super.call(this) || this;
+        _this.Tag = "Target";
+        var LoadImage = new eui.Image();
+        LoadImage.source = "resource/Target2.png";
+        _this.Image = LoadImage;
+        _this.Object.addChild(_this.Image);
         _this.TargetInit();
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
@@ -105,8 +118,11 @@ var DummyTarget = (function (_super) {
     ;
     DummyTarget.prototype.OnDestroy = function () {
         this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
-        this.Object.removeChild(this.Shape);
-        this.Shape = null;
+        if (this.Image != null) {
+            this.Object.removeChild(this.Image);
+            this.Image = null;
+        }
+        _super.prototype.OnDestroy.call(this);
     };
     ;
     DummyTarget.GetRandomInt = function (Min, Max) {

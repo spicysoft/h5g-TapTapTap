@@ -42,7 +42,10 @@
 		this.EmitTime=500;
 		this.EmitCount=0;
 		this.Time.delay=this.EmitTime;
-		GameObject.DestroyAll();
+
+		let Targets:GameObject[] =GameObject.FindObjects("Target");
+		Targets.forEach(Obj=>Obj.Destroy());
+
 		this.ScoreTex=new TextComp(0,0,"SCORE:0",100,0.5,0.5,0x00ffff,true);
 	}
 

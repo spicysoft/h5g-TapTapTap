@@ -6,6 +6,8 @@ abstract class GameObject
 	protected DestroyFlag :boolean=false;
 	protected Shape :egret.Shape=null;
 	protected Object: egret.DisplayObjectContainer = null;
+	protected Tag : string="Default";
+
     constructor()
 	{
 		this.Object=new egret.DisplayObjectContainer();
@@ -31,6 +33,13 @@ abstract class GameObject
 									});
     }
 
+
+//現在インスタンスされているオブジェクト群から指定タグと合致するものを検索しリストを返す
+	static FindObjects(TargetTag:string): GameObject[]
+	{
+		return GameObject.Objects.filter(Obj=>{return Obj.Tag==TargetTag;});
+	}
+
 	static DrawAll()
 	{
 		GameObject.Objects.forEach(Obj=>Obj.Draw());
@@ -38,14 +47,24 @@ abstract class GameObject
 
 	static DestroyAll()
 	{
-		GameObject.Objects.forEach(Obj=>Obj.Delete());
+		GameObject.Objects.forEach(Obj=>Obj.Destroy());
 	}
 
 	abstract Update():void;
 
+	public Destroy()
+	{
+		this.DestroyFlag=true;
+	}
+
 	private Delete()
 	{
-	this.OnDestroy();
+		this.OnDestroy();
+		if( this.Shape!=null )
+		{
+			GameObject.Display.removeChild(this.Shape);
+			this.Shape = null;
+		}
 	}
 
 	abstract OnDestroy():void;

@@ -32,6 +32,7 @@ var Circle = (function (_super) {
     ;
     Circle.prototype.OnDestroy = function () {
         this.Object.removeChild(this.Shape);
+        this.Shape = null;
     };
     ;
     return Circle;

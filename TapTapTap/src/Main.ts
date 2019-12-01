@@ -17,7 +17,7 @@ class Main extends eui.UILayer
     {
         GameObject.UpdateAll();
         GameObject.DrawAll();
-        return false;
+        return true;
     }
 }
  

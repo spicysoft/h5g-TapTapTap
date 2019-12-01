@@ -23,7 +23,7 @@ var Main = (function (_super) {
     Main.prototype.tickLoop = function (timeStamp) {
         GameObject.UpdateAll();
         GameObject.DrawAll();
-        return false;
+        return true;
     };
     return Main;
 }(eui.UILayer));
