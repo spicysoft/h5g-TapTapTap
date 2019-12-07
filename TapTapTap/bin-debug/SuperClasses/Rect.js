@@ -17,8 +17,16 @@ var Rect = (function (_super) {
         _this.PosY = SetPosY;
         _this.Width = SetWidth;
         _this.Height = SetHeight;
+        _this.Alpha = 1;
+        _this.Color = 0x00ff25;
         return _this;
     }
+    Rect.prototype.SetColor = function (SetCol) {
+        this.Color = SetCol;
+    };
+    Rect.prototype.SetAlpha = function (SetAlp) {
+        this.Alpha = SetAlp;
+    };
     Rect.prototype.RectSetting = function () {
         this.Shape = new egret.Shape();
         this.Width = 0;
@@ -26,17 +34,21 @@ var Rect = (function (_super) {
         this.PosX = 0;
         this.PosY = 0;
         GameObject.Display.addChild(this.Shape);
+        GameObject.Display.setChildIndex(this.Object, 0);
     };
     Rect.prototype.Draw = function () {
         var Graphics = this.Shape.graphics;
         Graphics.clear();
-        Graphics.beginFill(0x0000ff);
+        Graphics.beginFill(this.Color, this.Alpha);
         Graphics.drawRect(this.PosX, this.PosY, this.Width, this.Height);
         Graphics.endFill();
     };
     Rect.prototype.Update = function () { };
     ;
-    Rect.prototype.OnDestroy = function () { };
+    Rect.prototype.OnDestroy = function () {
+        this.Object.removeChild(this.Shape);
+        this.Shape = null;
+    };
     ;
     return Rect;
 }(GameObject));

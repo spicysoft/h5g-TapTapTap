@@ -28,6 +28,7 @@ var GameManager = (function (_super) {
         _this.Time.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
         _this.GameInit();
         _this.Object.touchEnabled = true;
+        _this.Head = new ImageComp("resource/Headder.png", 720 / 2, 160 / 2, 720, 160, 1, 1);
         GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN, _this.GameStart, _this);
         return _this;
     }
@@ -45,7 +46,18 @@ var GameManager = (function (_super) {
         this.Time.delay = this.EmitTime;
         var Targets = GameObject.FindObjects("Target");
         Targets.forEach(function (Obj) { return Obj.Destroy(); });
-        this.ScoreTex = new TextComp(0, 0, "SCORE:0", 100, 0.5, 0.5, 0x00ffff, true);
+        if (this.Button != null) {
+            this.Button.Destroy();
+            this.Button = null;
+        }
+        if (this.Window != null) {
+            this.Window.OnDestroy();
+            this.Window = null;
+        }
+        if (this.ScoreTex == null) {
+            this.ScoreTex = new TextComp(0, 0, "SCORE:0", 100, 0.5, 0.5, 0x00ffff, true);
+        }
+        this.ScoreTex.SetText("SCORE:" + this.Score.toFixed());
     };
     GameManager.prototype.Update = function () {
         this.ScoreTex.SetText("SCORE:" + this.Score.toFixed());
@@ -72,7 +84,8 @@ var GameManager = (function (_super) {
     ;
     GameManager.prototype.SetGameStatus = function (Status) {
         if (Status == GameStatus.Result) {
-            GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN, this.ResetGame, this);
+            this.Button = new ButtonComp(720 / 2, 1280 / 2 + 400);
+            this.Window = new WindowComp("SCORE", "SCORE:" + this.Score.toFixed(), 720 / 2, 1280 / 2);
         }
         this.NowStatus = Status;
     };
@@ -89,6 +102,7 @@ var GameManager = (function (_super) {
         this.EmitCount++;
         if (this.EmitCount >= 10) {
             this.Time.delay = this.Time.delay > 100 ? this.Time.delay - 20 : this.Time.delay;
+            this.EmitCount = 0;
         }
     };
     GameManager.GetRandomInt = function (Min, Max) {

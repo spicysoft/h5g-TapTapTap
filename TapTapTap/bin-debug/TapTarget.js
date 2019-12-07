@@ -13,15 +13,13 @@ var TapTarget = (function (_super) {
     function TapTarget(SetPosX, SetPosY) {
         var _this = _super.call(this) || this;
         _this.Tag = "Target";
-        var LoadImage = new eui.Image();
-        LoadImage.source = "resource/Target1.png";
-        _this.Image = LoadImage;
-        _this.Object.addChild(_this.Image);
+        _this.TargetImage = new ImageComp("resource/Target_1_160.png", 0, 0, 160, 160, 1, 1);
         _this.TargetInit();
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
-        _this.PosX = TapTarget.GetRandomInt(100, 620);
-        _this.Speed = TapTarget.GetRandomInt(5.0, 15.0);
+        _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
+        _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
+        _this.Alpha = 0.1;
         _this.Draw();
         return _this;
     }
@@ -37,7 +35,8 @@ var TapTarget = (function (_super) {
             return;
         }
         egret.log("TAP!!!!");
-        GameManager.GetInstance().AddScore(100);
+        GameManager.GetInstance().AddScore(1);
+        new CircleExpandEffect(this.PosX, this.PosY, 70, 0xf5f5f5);
         this.DestroyFlag = true;
     };
     TapTarget.prototype.Update = function () {
@@ -52,14 +51,12 @@ var TapTarget = (function (_super) {
             GameManager.GetInstance().SetGameStatus(GameStatus.Result);
             return;
         }
+        this.TargetImage.SetPos(this.PosX, this.PosY);
     };
     ;
     TapTarget.prototype.OnDestroy = function () {
         this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
-        if (this.Image != null) {
-            this.Object.removeChild(this.Image);
-            this.Image = null;
-        }
+        this.TargetImage.OnDestroy();
         _super.prototype.OnDestroy.call(this);
     };
     ;
@@ -74,15 +71,13 @@ var DummyTarget = (function (_super) {
     function DummyTarget(SetPosX, SetPosY) {
         var _this = _super.call(this) || this;
         _this.Tag = "Target";
-        var LoadImage = new eui.Image();
-        LoadImage.source = "resource/Target2.png";
-        _this.Image = LoadImage;
-        _this.Object.addChild(_this.Image);
+        _this.TargetImage = new ImageComp("resource/Target_2_160.png", 0, 0, 160, 160, 1, 1);
         _this.TargetInit();
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
-        _this.PosX = TapTarget.GetRandomInt(100, 620);
-        _this.Speed = TapTarget.GetRandomInt(5.0, 15.0);
+        _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
+        _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
+        _this.Alpha = 0.3;
         _this.Draw();
         return _this;
     }
@@ -99,6 +94,7 @@ var DummyTarget = (function (_super) {
         }
         egret.log("TAP!!!!");
         GameManager.GetInstance().SetGameStatus(GameStatus.Result);
+        new CircleExpandEffect(this.PosX, this.PosY, 70, 0x101010);
         this.DestroyFlag = true;
     };
     DummyTarget.prototype.Update = function () {
@@ -111,17 +107,15 @@ var DummyTarget = (function (_super) {
         else {
             //ダミーマトの場合は加算する
             this.DestroyFlag = true;
-            GameManager.GetInstance().AddScore(100);
+            GameManager.GetInstance().AddScore(1);
             return;
         }
+        this.TargetImage.SetPos(this.PosX, this.PosY);
     };
     ;
     DummyTarget.prototype.OnDestroy = function () {
         this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
-        if (this.Image != null) {
-            this.Object.removeChild(this.Image);
-            this.Image = null;
-        }
+        this.TargetImage.OnDestroy();
         _super.prototype.OnDestroy.call(this);
     };
     ;
@@ -131,4 +125,41 @@ var DummyTarget = (function (_super) {
     return DummyTarget;
 }(Circle));
 __reflect(DummyTarget.prototype, "DummyTarget");
+var ButtonComp = (function (_super) {
+    __extends(ButtonComp, _super);
+    function ButtonComp(SetPosX, SetPosY) {
+        var _this = _super.call(this, SetPosX - 520 / 2, SetPosY - 120 / 2, 520, 120) || this;
+        _this.Tag = "Button";
+        _this.TargetImage = new ImageComp("resource/Button.png", SetPosX, SetPosY, 520, 120, 1, 1);
+        _this.Alpha = 1;
+        _this.Color = 0xff2222;
+        _this.TargetInit();
+        _this.Object.touchEnabled = true;
+        _this.Draw();
+        return _this;
+    }
+    ButtonComp.prototype.TargetInit = function () {
+        this.Object.touchEnabled = true;
+        this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+    };
+    ButtonComp.prototype.TapEvent = function () {
+        if (GameManager.GetInstance().GetGameStatus() != GameStatus.Result) {
+            this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+            return;
+        }
+        egret.log("TAP!!!!");
+        GameManager.GetInstance().ResetGame();
+        this.DestroyFlag = true;
+    };
+    ButtonComp.prototype.Update = function () { };
+    ;
+    ButtonComp.prototype.OnDestroy = function () {
+        this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.TargetImage.OnDestroy();
+        _super.prototype.OnDestroy.call(this);
+    };
+    ;
+    return ButtonComp;
+}(Rect));
+__reflect(ButtonComp.prototype, "ButtonComp");
 //# sourceMappingURL=TapTarget.js.map

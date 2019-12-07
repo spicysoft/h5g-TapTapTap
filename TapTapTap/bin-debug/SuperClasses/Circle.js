@@ -18,14 +18,23 @@ var Circle = (function (_super) {
     Circle.prototype.CircleSetting = function () {
         this.PosX = 150;
         this.PosY = 150;
+        this.Alpha = 1;
+        this.Color = 0x251025;
         this.Shape = new egret.Shape();
         this.Object.addChild(this.Shape);
+        GameObject.Display.setChildIndex(this.Object, 5);
+    };
+    Circle.prototype.SetColor = function (SetCol) {
+        this.Color = SetCol;
+    };
+    Circle.prototype.SetAlpha = function (SetAlp) {
+        this.Alpha = SetAlp;
     };
     Circle.prototype.Draw = function () {
         var Graphics = this.Shape.graphics;
         Graphics.clear();
-        Graphics.beginFill(0xffff00);
-        Graphics.drawCircle(this.PosX, this.PosY, 100);
+        Graphics.beginFill(0xffff00, this.Alpha);
+        Graphics.drawCircle(this.PosX, this.PosY, 85);
         Graphics.endFill();
     };
     Circle.prototype.Update = function () { };

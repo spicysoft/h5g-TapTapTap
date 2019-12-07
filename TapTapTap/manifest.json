@@ -12,8 +12,10 @@
 		"bin-debug/SuperClasses/GameObject.js",
 		"bin-debug/SuperClasses/Circle.js",
 		"bin-debug/SuperClasses/Rect.js",
+		"bin-debug/Effect.js",
 		"bin-debug/GameManager.js",
 		"bin-debug/Main.js",
-		"bin-debug/TapTarget.js"
+		"bin-debug/TapTarget.js",
+		"bin-debug/UICompornent.js"
 	]
 }

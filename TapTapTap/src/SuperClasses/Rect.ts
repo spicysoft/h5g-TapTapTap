@@ -4,7 +4,8 @@ class Rect extends GameObject
 	protected  PosY :number;
 	protected  Height: number;
     protected  Width: number;
-
+	protected  Color:number;
+	protected  Alpha:number;
 	constructor(SetPosX:number,SetPosY:number,SetWidth:number,SetHeight:number)
 	{
 		super();
@@ -13,6 +14,18 @@ class Rect extends GameObject
 		this.PosY=SetPosY;
 		this.Width=SetWidth;
 		this.Height=SetHeight;
+		this.Alpha=1;
+		this.Color=0x00ff25;
+	}
+	
+	SetColor(SetCol:number)
+	{
+		this.Color=SetCol;
+	}
+
+	SetAlpha(SetAlp:number)
+	{
+		this.Alpha=SetAlp;
 	}
 
 	RectSetting()
@@ -23,18 +36,23 @@ class Rect extends GameObject
 		this.PosX=0;
 		this.PosY=0;
 		GameObject.Display.addChild(this.Shape);
+		GameObject.Display.setChildIndex(this.Object,0);
 	}
 
 	Draw()
 	{
 		let Graphics = this.Shape.graphics;
 		Graphics.clear();
-		Graphics.beginFill(0x0000ff);
+		Graphics.beginFill(this.Color,this.Alpha);
         Graphics.drawRect(this.PosX, this.PosY,this.Width,this.Height);
 		Graphics.endFill();
 	}
 	
 	Update(){};
 
-	OnDestroy(){};
+	OnDestroy()
+	{
+		 this.Object.removeChild(this.Shape);
+		 this.Shape=null;
+	};
 }

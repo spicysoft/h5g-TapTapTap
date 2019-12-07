@@ -15,6 +15,10 @@
 	private Time:egret.Timer;
 	private static Instance:GameManager=null;
 
+	private Head:ImageComp;
+	private Window:WindowComp;
+	private Button:ButtonComp;
+
 	public static GetInstance():GameManager
 	{
 		if(GameManager.Instance==null)
@@ -32,6 +36,7 @@
         this.Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
 		this.GameInit();
 		this.Object.touchEnabled=true;
+		this.Head=new ImageComp("resource/Headder.png",720/2,160/2,720,160,1,1);
 		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 	}
 
@@ -45,8 +50,21 @@
 
 		let Targets:GameObject[] =GameObject.FindObjects("Target");
 		Targets.forEach(Obj=>Obj.Destroy());
-
-		this.ScoreTex=new TextComp(0,0,"SCORE:0",100,0.5,0.5,0x00ffff,true);
+		if(this.Button!=null)
+		{
+			this.Button.Destroy();
+			this.Button=null;
+		}
+		if(this.Window!=null)
+		{
+			this.Window.OnDestroy();
+			this.Window=null;
+		}
+		if(this.ScoreTex==null)
+		{
+			this.ScoreTex=new TextComp(0,0,"SCORE:0",100,0.5,0.5,0x00ffff,true);
+		}
+		this.ScoreTex.SetText("SCORE:"+this.Score.toFixed());
 	}
 
 	Update()
@@ -58,7 +76,7 @@
 
 	Draw(){};
 
-	private ResetGame()
+	public ResetGame()
 	{
 		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 		this.GameInit();
@@ -84,7 +102,8 @@
 	{
 		if(Status==GameStatus.Result)
 		{
-		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.ResetGame,this);
+			this.Button=new ButtonComp(720/2,1280/2 + 400);
+			this.Window=new WindowComp("SCORE","SCORE:"+this.Score.toFixed(),720/2,1280/2);
 		}
 		this.NowStatus=Status;
 	}
@@ -110,6 +129,7 @@
 		if(this.EmitCount>=10)
 		{
 			this.Time.delay = this.Time.delay>100 ? this.Time.delay-20:this.Time.delay;
+			this.EmitCount=0;
 		}
     }
 

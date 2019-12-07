@@ -38,6 +38,7 @@ var MainGame = (function () {
         new BackGround(0, 0, MainGame.Width, MainGame.Height);
         new UILayer();
         new GameManager();
+        MainGame.MainStage.setChildIndex(UILayer.Display, -1);
     };
     return MainGame;
 }());
@@ -54,94 +55,12 @@ var UILayer = (function () {
     return UILayer;
 }());
 __reflect(UILayer.prototype, "UILayer");
-var UICompornent = (function (_super) {
-    __extends(UICompornent, _super);
-    function UICompornent() {
-        var _this = _super.call(this) || this;
-        _this.Display = null;
-        _this.DestroyFlag = false;
-        _this.Init();
-        return _this;
-    }
-    UICompornent.prototype.Init = function () {
-        this.Display = new egret.DisplayObjectContainer();
-        UILayer.Display.addChild(this.Display);
-        UICompornent.Compornents.push(this);
-    };
-    UICompornent.UpdateAll = function () {
-        UICompornent.Compornents.forEach(function (Obj) { return Obj.Update(); });
-        UICompornent.Compornents = UICompornent.Compornents.filter(function (Obj) {
-            if (Obj.DestroyFlag == true) {
-                Obj.Delete();
-            }
-            return (!Obj.DestroyFlag);
-        });
-    };
-    UICompornent.DrawAll = function () {
-        UICompornent.Compornents.forEach(function (Obj) { return Obj.Draw(); });
-    };
-    UICompornent.DestroyAll = function () {
-        UICompornent.Compornents.forEach(function (Obj) { return Obj.Delete(); });
-    };
-    UICompornent.prototype.SetDeleteFlag = function () {
-        this.DestroyFlag = true;
-    };
-    UICompornent.prototype.Delete = function () {
-        this.OnDestroy();
-    };
-    UICompornent.Compornents = [];
-    return UICompornent;
-}(egret.DisplayObjectContainer));
-__reflect(UICompornent.prototype, "UICompornent");
-var TextComp = (function (_super) {
-    __extends(TextComp, _super);
-    function TextComp(PosX, PosY, SetText, Size, ScaleX, ScaleY, Color, Bold) {
-        var _this = _super.call(this) || this;
-        _this.OutputText = "";
-        _this.TextF = null;
-        _this.TextF = new egret.TextField();
-        _this.TextF.x = PosX;
-        _this.TextF.y = PosY;
-        _this.TextF.text = SetText;
-        _this.TextF.bold = Bold;
-        _this.TextF.size = Size;
-        _this.TextF.scaleX = ScaleX;
-        _this.TextF.scaleY = ScaleY;
-        _this.TextF.textColor = Color;
-        _this.Display.addChild(_this.TextF);
-        return _this;
-    }
-    TextComp.prototype.SetText = function (SetText) {
-        this.TextF.text = SetText;
-    };
-    TextComp.prototype.Update = function () { };
-    ;
-    TextComp.prototype.OnDestroy = function () {
-        UILayer.Display.removeChild(this.TextF);
-        this.TextF = null;
-    };
-    ;
-    TextComp.prototype.Draw = function () { };
-    ;
-    TextComp.prototype.CreateText = function (PosX, PosY, SetText, Size, ScaleX, ScaleY, Color, Bold) {
-        var ReturnTF = new egret.TextField();
-        ReturnTF.x = PosX;
-        ReturnTF.y = PosY;
-        ReturnTF.text = SetText;
-        ReturnTF.bold = Bold;
-        ReturnTF.size = Size;
-        ReturnTF.scaleX = ScaleX;
-        ReturnTF.scaleY = ScaleY;
-        ReturnTF.textColor = Color;
-        return ReturnTF;
-    };
-    return TextComp;
-}(UICompornent));
-__reflect(TextComp.prototype, "TextComp");
 var BackGround = (function (_super) {
     __extends(BackGround, _super);
     function BackGround(SetPosX, SetPosY, SetWidth, SetHeight) {
-        return _super.call(this, SetPosX, SetPosY, SetWidth, SetHeight) || this;
+        var _this = _super.call(this, SetPosX, SetPosY, SetWidth, SetHeight) || this;
+        _this.SetColor(0xdf7126);
+        return _this;
     }
     return BackGround;
 }(Rect));
