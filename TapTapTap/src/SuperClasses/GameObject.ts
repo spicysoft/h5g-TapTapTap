@@ -67,6 +67,16 @@ abstract class GameObject
 		}
 	}
 
+	public GetPosX():number
+	{
+		return this.Object.x;
+	}
+
+	public GetPosY():number
+	{
+		return this.Object.y;
+	}
+
 	abstract OnDestroy():void;
 
 	abstract Draw():void;

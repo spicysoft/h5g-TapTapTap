@@ -33,8 +33,10 @@ var Rect = (function (_super) {
         this.Height = 0;
         this.PosX = 0;
         this.PosY = 0;
-        GameObject.Display.addChild(this.Shape);
-        GameObject.Display.setChildIndex(this.Object, 0);
+        this.Object.addChild(this.Shape);
+    };
+    Rect.prototype.SetIndexNum = function (Num) {
+        GameObject.Display.setChildIndex(this.Object, Num);
     };
     Rect.prototype.Draw = function () {
         var Graphics = this.Shape.graphics;
@@ -46,6 +48,7 @@ var Rect = (function (_super) {
     Rect.prototype.Update = function () { };
     ;
     Rect.prototype.OnDestroy = function () {
+        this.DestroyFlag = true;
         this.Object.removeChild(this.Shape);
         this.Shape = null;
     };

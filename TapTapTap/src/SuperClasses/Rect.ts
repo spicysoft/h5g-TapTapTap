@@ -35,10 +35,13 @@ class Rect extends GameObject
 		this.Height = 0;
 		this.PosX=0;
 		this.PosY=0;
-		GameObject.Display.addChild(this.Shape);
-		GameObject.Display.setChildIndex(this.Object,0);
+		this.Object.addChild(this.Shape);
 	}
 
+	public SetIndexNum(Num:number)
+	{
+		GameObject.Display.setChildIndex(this.Object,Num);
+	}
 	Draw()
 	{
 		let Graphics = this.Shape.graphics;
@@ -52,6 +55,7 @@ class Rect extends GameObject
 
 	OnDestroy()
 	{
+		this.DestroyFlag=true;
 		 this.Object.removeChild(this.Shape);
 		 this.Shape=null;
 	};

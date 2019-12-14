@@ -44,6 +44,12 @@ var GameObject = (function () {
             this.Shape = null;
         }
     };
+    GameObject.prototype.GetPosX = function () {
+        return this.Object.x;
+    };
+    GameObject.prototype.GetPosY = function () {
+        return this.Object.y;
+    };
     GameObject.Objects = [];
     return GameObject;
 }());

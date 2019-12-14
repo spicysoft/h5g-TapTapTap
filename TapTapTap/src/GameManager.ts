@@ -12,12 +12,16 @@
 	private ScoreTex:TextComp=null;
 	private EmitTime:number =500;
 	private EmitCount:number =0;
+	private TotalEmitCount:number =0;
 	private Time:egret.Timer;
 	private static Instance:GameManager=null;
 
-	private Head:ImageComp;
+	private Head:Rect;
 	private Window:WindowComp;
-	private Button:ButtonComp;
+	private TitleWindow:TitleWindowComp;
+	private Button:AllScreenButtonComp;
+
+	private DeadZone:Rect;
 
 	public static GetInstance():GameManager
 	{
@@ -36,7 +40,17 @@
         this.Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
 		this.GameInit();
 		this.Object.touchEnabled=true;
-		this.Head=new ImageComp("resource/Headder.png",720/2,160/2,720,160,1,1);
+
+		this.Head=new Rect(0,0,1280,60);
+		this.Head.SetColor(0x121212);
+		this.Head.SetAlpha(0.5);
+
+		this.DeadZone=new Rect(0,0,1280,200);
+		this.DeadZone.SetColor(0xd8574a);
+		this.DeadZone.SetAlpha(1);
+		this.DeadZone.SetIndexNum(10);
+		this.Head.SetIndexNum(-1);
+
 		GameObject.Display.once(egret.TouchEvent.TOUCH_BEGIN,this.GameStart,this);
 	}
 
@@ -46,10 +60,14 @@
 		this.Score=0;
 		this.EmitTime=500;
 		this.EmitCount=0;
+		this.TotalEmitCount=0;
 		this.Time.delay=this.EmitTime;
 
 		let Targets:GameObject[] =GameObject.FindObjects("Target");
 		Targets.forEach(Obj=>Obj.Destroy());
+
+		this.TitleWindow=new TitleWindowComp(720/2,1280/2-100);
+
 		if(this.Button!=null)
 		{
 			this.Button.Destroy();
@@ -62,7 +80,8 @@
 		}
 		if(this.ScoreTex==null)
 		{
-			this.ScoreTex=new TextComp(0,0,"SCORE:0",100,0.5,0.5,0x00ffff,true);
+			this.ScoreTex=new TextComp(0,0,"SCORE:0",100,0.5,0.5,0xeae8db,true,false);
+			this.ScoreTex.SetIndexNum(0);
 		}
 		this.ScoreTex.SetText("SCORE:"+this.Score.toFixed());
 	}
@@ -85,12 +104,19 @@
 	private GameStart()
 	{
 		this.NowStatus=GameStatus.MainGame;
+		this.TitleWindow.OnDestroy();
+		this.TitleWindow=null;
         this.Time.start();
 	}
 
 	public AddScore(AddValue:number)
 	{
 		this.Score+=AddValue;
+		if(this.Score<0)
+		{
+			this.Score=0;
+			this.SetGameStatus(GameStatus.Result);
+		}
 	}
 
 	 public GetGameStatus():GameStatus
@@ -102,8 +128,12 @@
 	{
 		if(Status==GameStatus.Result)
 		{
-			this.Button=new ButtonComp(720/2,1280/2 + 400);
-			this.Window=new WindowComp("SCORE","SCORE:"+this.Score.toFixed(),720/2,1280/2);
+			let Targets:GameObject[] =GameObject.FindObjects("Target");
+			Targets.forEach(Obj=>{
+				new CircleExpandEffect(Obj.GetPosX(),Obj.GetPosY(),70,0x621122);
+				Obj.Destroy();});
+			this.Button=new AllScreenButtonComp(720/2,1280/2 + 400);
+			this.Window=new WindowComp("SCORE",this.Score.toFixed(),720/2,1280/2);
 		}
 		this.NowStatus=Status;
 	}
@@ -117,16 +147,30 @@
 
 		if(GameManager.GetRandomInt(1,2)%2==1)
 		{
-			new TapTarget(MainGame.Width/2,MainGame.Height); 
+			if(this.TotalEmitCount>=50&&this.TotalEmitCount%6==0)
+			{
+				new TapTarget_2(MainGame.Width/2,MainGame.Height); 
+			}
+			else
+			{
+				new TapTarget(MainGame.Width/2,MainGame.Height); 
+			}
 		}
 		else
 		{
-			new DummyTarget(MainGame.Width/2,MainGame.Height); 
+			if(this.TotalEmitCount>=30&&this.TotalEmitCount%8==0)
+			{
+				new DummyTarget_2(MainGame.Width/2,MainGame.Height); 
+			}
+			else
+			{
+				new DummyTarget(MainGame.Width/2,MainGame.Height); 
+			}
 		}
 		
 		this.EmitCount++;
-
-		if(this.EmitCount>=10)
+		this.TotalEmitCount++;
+		if(this.EmitCount>=20)
 		{
 			this.Time.delay = this.Time.delay>100 ? this.Time.delay-20:this.Time.delay;
 			this.EmitCount=0;

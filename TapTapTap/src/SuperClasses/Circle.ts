@@ -18,9 +18,11 @@ class Circle extends GameObject
 		this.Color=0x251025;
 		this.Shape=new egret.Shape();
 		this.Object.addChild(this.Shape);
-		GameObject.Display.setChildIndex(this.Object,5);
 	}
-
+	public SetIndexNum(Num:number)
+	{
+		GameObject.Display.setChildIndex(this.Object,Num);
+	}
 	SetColor(SetCol:number)
 	{
 		this.Color=SetCol;
@@ -35,12 +37,17 @@ class Circle extends GameObject
 	{
 		let Graphics = this.Shape.graphics;
 		Graphics.clear();
-		Graphics.beginFill(0xffff00,this.Alpha);
-		Graphics.drawCircle(this.PosX,this.PosY,85);
+		Graphics.beginFill(this.Color,this.Alpha);
+		//Graphics.drawCircle(this.PosX,this.PosY,85);
+		Graphics.drawCircle(0,0,85);
 		Graphics.endFill();
 	}
 
-	Update(){};
+	Update()
+	{
+		this.Object.x=this.PosX;
+		this.Object.y=this.PosY;
+	};
 
 	OnDestroy()
 	{

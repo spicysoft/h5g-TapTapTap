@@ -22,7 +22,9 @@ var Circle = (function (_super) {
         this.Color = 0x251025;
         this.Shape = new egret.Shape();
         this.Object.addChild(this.Shape);
-        GameObject.Display.setChildIndex(this.Object, 5);
+    };
+    Circle.prototype.SetIndexNum = function (Num) {
+        GameObject.Display.setChildIndex(this.Object, Num);
     };
     Circle.prototype.SetColor = function (SetCol) {
         this.Color = SetCol;
@@ -33,11 +35,15 @@ var Circle = (function (_super) {
     Circle.prototype.Draw = function () {
         var Graphics = this.Shape.graphics;
         Graphics.clear();
-        Graphics.beginFill(0xffff00, this.Alpha);
-        Graphics.drawCircle(this.PosX, this.PosY, 85);
+        Graphics.beginFill(this.Color, this.Alpha);
+        //Graphics.drawCircle(this.PosX,this.PosY,85);
+        Graphics.drawCircle(0, 0, 85);
         Graphics.endFill();
     };
-    Circle.prototype.Update = function () { };
+    Circle.prototype.Update = function () {
+        this.Object.x = this.PosX;
+        this.Object.y = this.PosY;
+    };
     ;
     Circle.prototype.OnDestroy = function () {
         this.Object.removeChild(this.Shape);

@@ -59,7 +59,7 @@ var BackGround = (function (_super) {
     __extends(BackGround, _super);
     function BackGround(SetPosX, SetPosY, SetWidth, SetHeight) {
         var _this = _super.call(this, SetPosX, SetPosY, SetWidth, SetHeight) || this;
-        _this.SetColor(0xdf7126);
+        _this.SetColor(0xecce9e);
         return _this;
     }
     return BackGround;

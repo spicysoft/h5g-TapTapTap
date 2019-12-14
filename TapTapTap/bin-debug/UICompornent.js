@@ -22,6 +22,9 @@ var UICompornent = (function (_super) {
         UILayer.Display.addChild(this.Display);
         UICompornent.Compornents.push(this);
     };
+    UICompornent.prototype.SetIndexNum = function (Num) {
+        UILayer.Display.setChildIndex(this.Display, Num);
+    };
     UICompornent.UpdateAll = function () {
         UICompornent.Compornents.forEach(function (Obj) { return Obj.Update(); });
         UICompornent.Compornents = UICompornent.Compornents.filter(function (Obj) {
@@ -49,23 +52,37 @@ var UICompornent = (function (_super) {
 __reflect(UICompornent.prototype, "UICompornent");
 var TextComp = (function (_super) {
     __extends(TextComp, _super);
-    function TextComp(PosX, PosY, SetText, Size, ScaleX, ScaleY, Color, Bold) {
+    function TextComp(PosX, PosY, SetText, Size, ScaleX, ScaleY, Color, Bold, Center) {
         var _this = _super.call(this) || this;
         _this.OutputText = "";
         _this.TextF = null;
         _this.TextF = new egret.TextField();
-        _this.TextF.x = PosX;
-        _this.TextF.y = PosY;
         _this.TextF.text = SetText;
         _this.TextF.bold = Bold;
         _this.TextF.size = Size;
         _this.TextF.scaleX = ScaleX;
         _this.TextF.scaleY = ScaleY;
         _this.TextF.textColor = Color;
+        _this.TextF.x = Center ? (PosX) - _this.TextF.width * 0.5 : PosX;
+        _this.TextF.y = Center ? (PosY) - _this.TextF.height * 0.5 : PosY;
         _this.Display.addChild(_this.TextF);
-        _this.Display.setChildIndex(_this.TextF, -1);
+        UILayer.Display.setChildIndex(_this.Display, -1);
         return _this;
     }
+    TextComp.prototype.GetPosX = function () {
+        return this.TextF.x;
+    };
+    TextComp.prototype.GetPosY = function () {
+        return this.TextF.y;
+    };
+    TextComp.prototype.SetPos = function (XPos, YPos) {
+        this.TextF.x = XPos;
+        this.TextF.y = YPos;
+    };
+    TextComp.prototype.AddPos = function (XPos, YPos) {
+        this.TextF.x += XPos;
+        this.TextF.y += YPos;
+    };
     TextComp.prototype.SetText = function (SetText) {
         this.TextF.text = SetText;
     };
@@ -130,13 +147,64 @@ var ImageComp = (function (_super) {
     return ImageComp;
 }(UICompornent));
 __reflect(ImageComp.prototype, "ImageComp");
+var TitleWindowComp = (function (_super) {
+    __extends(TitleWindowComp, _super);
+    function TitleWindowComp(PosX, PosY) {
+        var _this = _super.call(this) || this;
+        _this.InfoText = [];
+        _this.TitleRect = new Rect(0, PosY - 100, 1280, 100);
+        _this.TitleRect.SetColor(0x621122);
+        _this.TitleRect.SetAlpha(1);
+        _this.TitleText = new TextComp(PosX, PosY - 50, "タピオカタップ", 80, 1, 1, 0xffffff, true, true);
+        _this.InfoRect = new Rect(0, PosY, 1280, 250);
+        _this.InfoRect.SetColor(0xd8574a);
+        _this.InfoRect.SetAlpha(1);
+        _this.InfoText[0] = new TextComp(PosX, PosY + 40, "緑色の円をタップ！", 50, 1, 1, 0xffffff, true, true);
+        _this.InfoText[1] = new TextComp(PosX, PosY + 90, "画面上の赤いエリアに", 50, 1, 1, 0xffffff, true, true);
+        _this.InfoText[2] = new TextComp(PosX, PosY + 140, "緑の円が入ると終了！", 50, 1, 1, 0xffffff, true, true);
+        _this.InfoText[3] = new TextComp(PosX, PosY + 190, "黒のタピオカは潰さないで！", 50, 1, 1, 0xffffff, true, true);
+        _this.InfoRect.SetIndexNum(5);
+        _this.TitleRect.SetIndexNum(5);
+        _this.TitleText.SetIndexNum(-1);
+        for (var i = 0; i < 4; i++) {
+            _this.InfoText[i].SetIndexNum(-1);
+        }
+        return _this;
+    }
+    TitleWindowComp.prototype.SetPos = function (PosX, PosY) {
+    };
+    TitleWindowComp.prototype.Update = function () { };
+    ;
+    TitleWindowComp.prototype.OnDestroy = function () {
+        this.TitleText.OnDestroy();
+        this.TitleRect.Destroy();
+        for (var i = 0; i < 4; i++) {
+            this.InfoText[i].OnDestroy();
+        }
+        this.InfoRect.Destroy();
+    };
+    ;
+    TitleWindowComp.prototype.Draw = function () { };
+    ;
+    return TitleWindowComp;
+}(UICompornent));
+__reflect(TitleWindowComp.prototype, "TitleWindowComp");
 var WindowComp = (function (_super) {
     __extends(WindowComp, _super);
     function WindowComp(Title, Info, PosX, PosY) {
         var _this = _super.call(this) || this;
-        _this.WindowImage = new ImageComp("resource/Window.png", PosX, PosY, 640, 520, 1, 1);
-        _this.TitleText = new TextComp(PosX - 105, PosY - 215, Title, 100, 0.5, 0.5, 0xffffff, true);
-        _this.InfoText = new TextComp(PosX - 210, PosY, Info, 100, 1, 1, 0xffffff, true);
+        _this.TitleRect = new Rect(0, PosY - 100, 1280, 100);
+        _this.TitleRect.SetColor(0x621122);
+        _this.TitleRect.SetAlpha(1);
+        _this.TitleText = new TextComp(PosX, PosY - 50, Title, 80, 1, 1, 0xffffff, true, true);
+        _this.InfoRect = new Rect(0, PosY, 1280, 150);
+        _this.InfoRect.SetColor(0xd8574a);
+        _this.InfoRect.SetAlpha(1);
+        _this.InfoText = new TextComp(PosX, PosY + 70, Info, 100, 1, 1, 0xffffff, true, true);
+        _this.InfoRect.SetIndexNum(5);
+        _this.TitleRect.SetIndexNum(5);
+        _this.InfoText.SetIndexNum(-1);
+        _this.TitleText.SetIndexNum(-1);
         return _this;
     }
     WindowComp.prototype.SetPos = function (PosX, PosY) {
@@ -144,9 +212,10 @@ var WindowComp = (function (_super) {
     WindowComp.prototype.Update = function () { };
     ;
     WindowComp.prototype.OnDestroy = function () {
-        this.WindowImage.OnDestroy();
         this.TitleText.OnDestroy();
+        this.TitleRect.Destroy();
         this.InfoText.OnDestroy();
+        this.InfoRect.Destroy();
     };
     ;
     WindowComp.prototype.Draw = function () { };

@@ -59,6 +59,6 @@ class UILayer
      constructor(SetPosX:number,SetPosY:number,SetWidth:number,SetHeight:number)
      {
         super(SetPosX,SetPosY,SetWidth,SetHeight);
-        this.SetColor(0xdf7126);
+        this.SetColor(0xecce9e);
      }
  }
