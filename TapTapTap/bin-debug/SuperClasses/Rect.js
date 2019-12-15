@@ -19,13 +19,16 @@ var Rect = (function (_super) {
         _this.Height = SetHeight;
         _this.Alpha = 1;
         _this.Color = 0x00ff25;
+        _this.DrawRect();
         return _this;
     }
     Rect.prototype.SetColor = function (SetCol) {
         this.Color = SetCol;
+        this.DrawRect();
     };
     Rect.prototype.SetAlpha = function (SetAlp) {
         this.Alpha = SetAlp;
+        this.DrawRect();
     };
     Rect.prototype.RectSetting = function () {
         this.Shape = new egret.Shape();
@@ -39,6 +42,8 @@ var Rect = (function (_super) {
         GameObject.Display.setChildIndex(this.Object, Num);
     };
     Rect.prototype.Draw = function () {
+    };
+    Rect.prototype.DrawRect = function () {
         var Graphics = this.Shape.graphics;
         Graphics.clear();
         Graphics.beginFill(this.Color, this.Alpha);

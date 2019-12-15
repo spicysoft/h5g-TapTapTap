@@ -16,8 +16,8 @@ var Circle = (function (_super) {
         return _this;
     }
     Circle.prototype.CircleSetting = function () {
-        this.PosX = 150;
-        this.PosY = 150;
+        this.PosX = 0;
+        this.PosY = 0;
         this.Alpha = 1;
         this.Color = 0x251025;
         this.Shape = new egret.Shape();
@@ -33,6 +33,8 @@ var Circle = (function (_super) {
         this.Alpha = SetAlp;
     };
     Circle.prototype.Draw = function () {
+    };
+    Circle.prototype.DrawCircle = function () {
         var Graphics = this.Shape.graphics;
         Graphics.clear();
         Graphics.beginFill(this.Color, this.Alpha);

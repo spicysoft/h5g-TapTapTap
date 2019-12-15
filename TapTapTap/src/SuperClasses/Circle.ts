@@ -12,8 +12,8 @@ class Circle extends GameObject
 	
 	CircleSetting()
 	{
-		this.PosX=150;
-		this.PosY=150;
+		this.PosX=0;
+		this.PosY=0;
 		this.Alpha=1;
 		this.Color=0x251025;
 		this.Shape=new egret.Shape();
@@ -35,6 +35,10 @@ class Circle extends GameObject
 
 	Draw()
 	{
+	}
+
+	DrawCircle()
+	{
 		let Graphics = this.Shape.graphics;
 		Graphics.clear();
 		Graphics.beginFill(this.Color,this.Alpha);
@@ -42,7 +46,6 @@ class Circle extends GameObject
 		Graphics.drawCircle(0,0,85);
 		Graphics.endFill();
 	}
-
 	Update()
 	{
 		this.Object.x=this.PosX;

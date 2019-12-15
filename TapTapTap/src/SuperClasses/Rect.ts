@@ -16,16 +16,19 @@ class Rect extends GameObject
 		this.Height=SetHeight;
 		this.Alpha=1;
 		this.Color=0x00ff25;
+		this.DrawRect();
 	}
 	
 	SetColor(SetCol:number)
 	{
 		this.Color=SetCol;
+		this.DrawRect();
 	}
 
 	SetAlpha(SetAlp:number)
 	{
 		this.Alpha=SetAlp;
+		this.DrawRect();
 	}
 
 	RectSetting()
@@ -44,13 +47,17 @@ class Rect extends GameObject
 	}
 	Draw()
 	{
+	}
+	
+	DrawRect()
+	{
 		let Graphics = this.Shape.graphics;
 		Graphics.clear();
 		Graphics.beginFill(this.Color,this.Alpha);
         Graphics.drawRect(this.PosX, this.PosY,this.Width,this.Height);
 		Graphics.endFill();
 	}
-	
+
 	Update(){};
 
 	OnDestroy()

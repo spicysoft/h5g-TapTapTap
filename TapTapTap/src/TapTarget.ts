@@ -17,13 +17,12 @@ class TapTarget extends Circle
 
 		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
 		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
-		this.Color=0x738b2a;
 		this.Alpha=1;
 		this.SetIndexNum(-1);
 
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
-		this.Draw();
+		this.DrawCircle();
 	}
 
 	TargetInit()
@@ -43,7 +42,7 @@ class TapTarget extends Circle
 		}
 		egret.log("TAP!!!!");
 		GameManager.GetInstance().AddScore(1);
-		new CircleExpandEffect(this.PosX,this.PosY,70,0x738b2a);
+		new CircleExpandEffect(this.PosX,this.PosY,70,0x621122);
 		this.DestroyFlag=true;
 	}
 
@@ -97,12 +96,11 @@ class TapTarget_2 extends Circle
 		this.BaseX=SetPosX;
 		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
 		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
-		this.Color=0x738b2a;
 		this.Alpha=1;
 		this.SetIndexNum(-1);
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
-		this.Draw();
+		this.DrawCircle();
 	}
 
 	TargetInit()
@@ -122,7 +120,7 @@ class TapTarget_2 extends Circle
 		}
 		egret.log("TAP!!!!");
 		GameManager.GetInstance().AddScore(1);
-		new CircleExpandEffect(this.PosX,this.PosY,70,0x738b2a);
+		new CircleExpandEffect(this.PosX,this.PosY,70,0x621122);
 		this.DestroyFlag=true;
 	}
 
@@ -174,9 +172,10 @@ class DummyTarget extends Circle
 		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
 		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
 		this.Alpha=1;
+		this.Color=0xd8574a;
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
-		this.Draw();
+		this.DrawCircle();
 		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
 	}
 
@@ -196,7 +195,7 @@ class DummyTarget extends Circle
 		}
 		egret.log("TAP!!!!");
 		GameManager.GetInstance().AddScore(-2);
-		new CircleExpandEffect(this.PosX,this.PosY,70,0x621122);
+		new CircleExpandEffect(this.PosX,this.PosY,70,0xd8574a);
 		this.DestroyFlag=true;
 	}
 
@@ -215,7 +214,7 @@ class DummyTarget extends Circle
 		else
 		{
 			this.DestroyFlag=true;
-			new CircleExpandEffect(this.PosX,this.PosY,70,0x251025);
+			new CircleExpandEffect(this.PosX,this.PosY,70,0xd8574a);
 			return;
 		}
 	};
@@ -248,6 +247,7 @@ class DummyTarget_2 extends Circle
 		this.PosX=SetPosX;
 		this.BaseX=SetPosX;
 		this.PosY=SetPosY;
+		this.Color=0xd8574a;
 		this.SetIndexNum(-1);
 		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
 		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
@@ -255,7 +255,7 @@ class DummyTarget_2 extends Circle
 
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
-		this.Draw();
+		this.DrawCircle();
 		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
 	}
 
@@ -294,7 +294,7 @@ class DummyTarget_2 extends Circle
 		else
 		{
 			this.DestroyFlag=true;
-			new CircleExpandEffect(this.PosX,this.PosY,70,0x251025);
+			new CircleExpandEffect(this.PosX,this.PosY,70,0xd8574a);
 			return;
 		}
 	};
@@ -328,7 +328,7 @@ class ButtonComp extends Rect
 		this.TargetInit();
 		this.Object.touchEnabled=true;
 
-		this.Draw();
+		this.DrawRect();
 	}
 
 	TargetInit()
@@ -374,7 +374,7 @@ class AllScreenButtonComp extends Rect
 		this.Color=0xff2222;
 		this.TargetInit();
 		this.Object.touchEnabled=true;
-		this.Draw();
+		this.DrawRect();
 	}
 
 	TargetInit()

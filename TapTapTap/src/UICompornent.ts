@@ -199,10 +199,10 @@ class TitleWindowComp extends UICompornent
         this.InfoRect.SetColor(0xd8574a);
 		this.InfoRect.SetAlpha(1);
 
-        this.InfoText[0]=new TextComp(PosX,PosY+40,"緑色の円をタップ！",50,1,1,0xffffff,true,true);
+        this.InfoText[0]=new TextComp(PosX,PosY+40,"黒タピオカをタップ！",50,1,1,0xffffff,true,true);
         this.InfoText[1]=new TextComp(PosX,PosY+90,"画面上の赤いエリアに",50,1,1,0xffffff,true,true);
-        this.InfoText[2]=new TextComp(PosX,PosY+140,"緑の円が入ると終了！",50,1,1,0xffffff,true,true);
-        this.InfoText[3]=new TextComp(PosX,PosY+190,"黒のタピオカは潰さないで！",50,1,1,0xffffff,true,true);
+        this.InfoText[2]=new TextComp(PosX,PosY+140,"黒タピオカが入ると終了！",50,1,1,0xffffff,true,true);
+        this.InfoText[3]=new TextComp(PosX,PosY+190,"赤のタピオカは潰さないで！",50,1,1,0xffffff,true,true);
 
         this.InfoRect.SetIndexNum(5);
         this.TitleRect.SetIndexNum(5);

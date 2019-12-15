@@ -18,12 +18,11 @@ var TapTarget = (function (_super) {
         _this.PosY = SetPosY;
         _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
         _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
-        _this.Color = 0x738b2a;
         _this.Alpha = 1;
         _this.SetIndexNum(-1);
         _this.Object.x = _this.PosX;
         _this.Object.y = _this.PosY;
-        _this.Draw();
+        _this.DrawCircle();
         return _this;
     }
     TapTarget.prototype.TargetInit = function () {
@@ -39,7 +38,7 @@ var TapTarget = (function (_super) {
         }
         egret.log("TAP!!!!");
         GameManager.GetInstance().AddScore(1);
-        new CircleExpandEffect(this.PosX, this.PosY, 70, 0x738b2a);
+        new CircleExpandEffect(this.PosX, this.PosY, 70, 0x621122);
         this.DestroyFlag = true;
     };
     TapTarget.prototype.Update = function () {
@@ -79,12 +78,11 @@ var TapTarget_2 = (function (_super) {
         _this.BaseX = SetPosX;
         _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
         _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
-        _this.Color = 0x738b2a;
         _this.Alpha = 1;
         _this.SetIndexNum(-1);
         _this.Object.x = _this.PosX;
         _this.Object.y = _this.PosY;
-        _this.Draw();
+        _this.DrawCircle();
         return _this;
     }
     TapTarget_2.prototype.TargetInit = function () {
@@ -100,7 +98,7 @@ var TapTarget_2 = (function (_super) {
         }
         egret.log("TAP!!!!");
         GameManager.GetInstance().AddScore(1);
-        new CircleExpandEffect(this.PosX, this.PosY, 70, 0x738b2a);
+        new CircleExpandEffect(this.PosX, this.PosY, 70, 0x621122);
         this.DestroyFlag = true;
     };
     TapTarget_2.prototype.Update = function () {
@@ -142,9 +140,10 @@ var DummyTarget = (function (_super) {
         _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
         _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
         _this.Alpha = 1;
+        _this.Color = 0xd8574a;
         _this.Object.x = _this.PosX;
         _this.Object.y = _this.PosY;
-        _this.Draw();
+        _this.DrawCircle();
         _this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.TapEvent, _this);
         return _this;
     }
@@ -160,7 +159,7 @@ var DummyTarget = (function (_super) {
         }
         egret.log("TAP!!!!");
         GameManager.GetInstance().AddScore(-2);
-        new CircleExpandEffect(this.PosX, this.PosY, 70, 0x621122);
+        new CircleExpandEffect(this.PosX, this.PosY, 70, 0xd8574a);
         this.DestroyFlag = true;
     };
     DummyTarget.prototype.Update = function () {
@@ -174,7 +173,7 @@ var DummyTarget = (function (_super) {
         }
         else {
             this.DestroyFlag = true;
-            new CircleExpandEffect(this.PosX, this.PosY, 70, 0x251025);
+            new CircleExpandEffect(this.PosX, this.PosY, 70, 0xd8574a);
             return;
         }
     };
@@ -200,13 +199,14 @@ var DummyTarget_2 = (function (_super) {
         _this.PosX = SetPosX;
         _this.BaseX = SetPosX;
         _this.PosY = SetPosY;
+        _this.Color = 0xd8574a;
         _this.SetIndexNum(-1);
         _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
         _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
         _this.Alpha = 1;
         _this.Object.x = _this.PosX;
         _this.Object.y = _this.PosY;
-        _this.Draw();
+        _this.DrawCircle();
         _this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.TapEvent, _this);
         return _this;
     }
@@ -236,7 +236,7 @@ var DummyTarget_2 = (function (_super) {
         }
         else {
             this.DestroyFlag = true;
-            new CircleExpandEffect(this.PosX, this.PosY, 70, 0x251025);
+            new CircleExpandEffect(this.PosX, this.PosY, 70, 0xd8574a);
             return;
         }
     };
@@ -263,7 +263,7 @@ var ButtonComp = (function (_super) {
         _this.Color = 0xff2222;
         _this.TargetInit();
         _this.Object.touchEnabled = true;
-        _this.Draw();
+        _this.DrawRect();
         return _this;
     }
     ButtonComp.prototype.TargetInit = function () {
@@ -300,7 +300,7 @@ var AllScreenButtonComp = (function (_super) {
         _this.Color = 0xff2222;
         _this.TargetInit();
         _this.Object.touchEnabled = true;
-        _this.Draw();
+        _this.DrawRect();
         return _this;
     }
     AllScreenButtonComp.prototype.TargetInit = function () {

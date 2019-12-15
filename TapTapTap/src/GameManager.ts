@@ -134,6 +134,7 @@
 				Obj.Destroy();});
 			this.Button=new AllScreenButtonComp(720/2,1280/2 + 400);
 			this.Window=new WindowComp("SCORE",this.Score.toFixed(),720/2,1280/2);
+			this.Time.stop();
 		}
 		this.NowStatus=Status;
 	}
@@ -170,11 +171,6 @@
 		
 		this.EmitCount++;
 		this.TotalEmitCount++;
-		if(this.EmitCount>=20)
-		{
-			this.Time.delay = this.Time.delay>100 ? this.Time.delay-20:this.Time.delay;
-			this.EmitCount=0;
-		}
     }
 
 	    static GetRandomInt(Min:number, Max:number):number 

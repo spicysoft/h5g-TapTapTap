@@ -108,6 +108,7 @@ var GameManager = (function (_super) {
             });
             this.Button = new AllScreenButtonComp(720 / 2, 1280 / 2 + 400);
             this.Window = new WindowComp("SCORE", this.Score.toFixed(), 720 / 2, 1280 / 2);
+            this.Time.stop();
         }
         this.NowStatus = Status;
     };
@@ -133,10 +134,6 @@ var GameManager = (function (_super) {
         }
         this.EmitCount++;
         this.TotalEmitCount++;
-        if (this.EmitCount >= 20) {
-            this.Time.delay = this.Time.delay > 100 ? this.Time.delay - 20 : this.Time.delay;
-            this.EmitCount = 0;
-        }
     };
     GameManager.GetRandomInt = function (Min, Max) {
         return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
