@@ -16,8 +16,8 @@ var TapTarget = (function (_super) {
         _this.TargetInit();
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
-        _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
-        _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
+        _this.PosX = Utility.GetRandomInt(100.0, 620.0);
+        _this.Speed = Utility.GetRandom(0.3, 1.5);
         _this.Alpha = 1;
         _this.SetIndexNum(-1);
         _this.Object.x = _this.PosX;
@@ -29,11 +29,11 @@ var TapTarget = (function (_super) {
         this.Height = egret.MainContext.instance.stage.stageHeight;
         this.Width = egret.MainContext.instance.stage.stageWidth;
         this.Object.touchEnabled = true;
-        this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
     };
     TapTarget.prototype.TapEvent = function () {
         if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
-            this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+            this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
@@ -46,7 +46,7 @@ var TapTarget = (function (_super) {
             return;
         }
         if (this.PosY > 200) {
-            this.PosY -= this.Speed;
+            this.PosY -= this.Speed * GameObject.FixedTime;
             this.Object.x = this.PosX;
             this.Object.y = this.PosY;
         }
@@ -57,12 +57,19 @@ var TapTarget = (function (_super) {
     };
     ;
     TapTarget.prototype.OnDestroy = function () {
-        this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
         _super.prototype.OnDestroy.call(this);
     };
     ;
-    TapTarget.GetRandomInt = function (Min, Max) {
-        return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
+    TapTarget.prototype.DrawCircle = function () {
+        var Graphics = this.Shape.graphics;
+        Graphics.clear();
+        Graphics.beginFill(this.Color, this.Alpha);
+        Graphics.drawCircle(0, 0, 85);
+        Graphics.endFill();
+        Graphics.beginFill(0x000000, 0);
+        Graphics.drawCircle(0, 0, 110);
+        Graphics.endFill();
     };
     return TapTarget;
 }(Circle));
@@ -76,8 +83,8 @@ var TapTarget_2 = (function (_super) {
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
         _this.BaseX = SetPosX;
-        _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
-        _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
+        _this.PosX = Utility.GetRandomInt(100.0, 620.0);
+        _this.Speed = Utility.GetRandom(0.3, 1.5);
         _this.Alpha = 1;
         _this.SetIndexNum(-1);
         _this.Object.x = _this.PosX;
@@ -89,11 +96,11 @@ var TapTarget_2 = (function (_super) {
         this.Height = egret.MainContext.instance.stage.stageHeight;
         this.Width = egret.MainContext.instance.stage.stageWidth;
         this.Object.touchEnabled = true;
-        this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
     };
     TapTarget_2.prototype.TapEvent = function () {
         if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
-            this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+            this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
@@ -106,8 +113,8 @@ var TapTarget_2 = (function (_super) {
             return;
         }
         if (this.PosY > 200) {
-            this.PosY -= this.Speed;
-            egret.Tween.get(this, { loop: true }).to({ PosX: this.BaseX - 100 }, 500).to({ PosX: this.BaseX }, 500).to({ PosX: this.BaseX + 100 }, 500).to({ PosX: this.BaseX }, 500);
+            this.PosY -= this.Speed * GameObject.FixedTime;
+            egret.Tween.get(this, { loop: true }).to({ PosX: this.BaseX - 100 }, 500).to({ PosX: this.BaseX + 100 }, 500).to({ PosX: this.BaseX + 100 }, 500).to({ PosX: this.BaseX - 100 }, 500);
             this.Object.x = this.PosX;
             this.Object.y = this.PosY;
         }
@@ -118,12 +125,19 @@ var TapTarget_2 = (function (_super) {
     };
     ;
     TapTarget_2.prototype.OnDestroy = function () {
-        this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
         _super.prototype.OnDestroy.call(this);
     };
     ;
-    TapTarget_2.GetRandomInt = function (Min, Max) {
-        return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
+    TapTarget_2.prototype.DrawCircle = function () {
+        var Graphics = this.Shape.graphics;
+        Graphics.clear();
+        Graphics.beginFill(this.Color, this.Alpha);
+        Graphics.drawCircle(0, 0, 85);
+        Graphics.endFill();
+        Graphics.beginFill(0x000000, 0);
+        Graphics.drawCircle(0, 0, 110);
+        Graphics.endFill();
     };
     return TapTarget_2;
 }(Circle));
@@ -137,14 +151,14 @@ var DummyTarget = (function (_super) {
         _this.PosX = SetPosX;
         _this.PosY = SetPosY;
         _this.SetIndexNum(-1);
-        _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
-        _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
+        _this.PosX = Utility.GetRandomInt(100.0, 620.0);
+        _this.Speed = Utility.GetRandom(0.3, 1.5);
         _this.Alpha = 1;
         _this.Color = 0xd8574a;
         _this.Object.x = _this.PosX;
         _this.Object.y = _this.PosY;
         _this.DrawCircle();
-        _this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.TapEvent, _this);
+        _this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.TapEvent, _this);
         return _this;
     }
     DummyTarget.prototype.TargetInit = function () {
@@ -154,7 +168,7 @@ var DummyTarget = (function (_super) {
     };
     DummyTarget.prototype.TapEvent = function () {
         if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
-            this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+            this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
@@ -167,7 +181,7 @@ var DummyTarget = (function (_super) {
             return;
         }
         if (this.PosY > 200) {
-            this.PosY -= this.Speed;
+            this.PosY -= this.Speed * GameObject.FixedTime;
             this.Object.x = this.PosX;
             this.Object.y = this.PosY;
         }
@@ -183,9 +197,6 @@ var DummyTarget = (function (_super) {
         _super.prototype.OnDestroy.call(this);
     };
     ;
-    DummyTarget.GetRandomInt = function (Min, Max) {
-        return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
-    };
     return DummyTarget;
 }(Circle));
 __reflect(DummyTarget.prototype, "DummyTarget");
@@ -201,13 +212,13 @@ var DummyTarget_2 = (function (_super) {
         _this.PosY = SetPosY;
         _this.Color = 0xd8574a;
         _this.SetIndexNum(-1);
-        _this.PosX = TapTarget.GetRandomInt(100.0, 620.0);
-        _this.Speed = TapTarget.GetRandomInt(3.0, 17.0);
+        _this.PosX = Utility.GetRandomInt(100.0, 620.0);
+        _this.Speed = Utility.GetRandom(0.3, 1.5);
         _this.Alpha = 1;
         _this.Object.x = _this.PosX;
         _this.Object.y = _this.PosY;
         _this.DrawCircle();
-        _this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.TapEvent, _this);
+        _this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.TapEvent, _this);
         return _this;
     }
     DummyTarget_2.prototype.TargetInit = function () {
@@ -217,7 +228,7 @@ var DummyTarget_2 = (function (_super) {
     };
     DummyTarget_2.prototype.TapEvent = function () {
         if (GameManager.GetInstance().GetGameStatus() != GameStatus.MainGame) {
-            this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+            this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
@@ -229,8 +240,8 @@ var DummyTarget_2 = (function (_super) {
             return;
         }
         if (this.PosY > 200) {
-            this.PosY -= this.Speed;
-            egret.Tween.get(this, { loop: true }).to({ PosX: this.BaseX - 100 }, 500).to({ PosX: this.BaseX }, 500).to({ PosX: this.BaseX + 100 }, 500).to({ PosX: this.BaseX }, 500);
+            this.PosY -= this.Speed * GameObject.FixedTime;
+            egret.Tween.get(this, { loop: true }).to({ PosX: this.BaseX - 100 }, 500).to({ PosX: this.BaseX + 100 }, 500).to({ PosX: this.BaseX + 100 }, 500).to({ PosX: this.BaseX - 100 }, 500);
             this.Object.x = this.PosX;
             this.Object.y = this.PosY;
         }
@@ -242,13 +253,10 @@ var DummyTarget_2 = (function (_super) {
     };
     ;
     DummyTarget_2.prototype.OnDestroy = function () {
-        this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
         _super.prototype.OnDestroy.call(this);
     };
     ;
-    DummyTarget_2.GetRandomInt = function (Min, Max) {
-        return Math.floor(Min + Math.random() * (Max + 0.999 - Min));
-    };
     return DummyTarget_2;
 }(Circle));
 __reflect(DummyTarget_2.prototype, "DummyTarget_2");
@@ -268,11 +276,11 @@ var ButtonComp = (function (_super) {
     }
     ButtonComp.prototype.TargetInit = function () {
         this.Object.touchEnabled = true;
-        this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
     };
     ButtonComp.prototype.TapEvent = function () {
         if (GameManager.GetInstance().GetGameStatus() != GameStatus.Result) {
-            this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+            this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
             return;
         }
         egret.log("TAP!!!!");
@@ -282,7 +290,7 @@ var ButtonComp = (function (_super) {
     ButtonComp.prototype.Update = function () { };
     ;
     ButtonComp.prototype.OnDestroy = function () {
-        this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TapEvent, this);
+        this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.TapEvent, this);
         this.TargetImage.OnDestroy();
         _super.prototype.OnDestroy.call(this);
     };

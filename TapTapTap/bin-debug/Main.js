@@ -21,7 +21,7 @@ var Main = (function (_super) {
         egret.startTick(this.tickLoop, this);
     };
     Main.prototype.tickLoop = function (timeStamp) {
-        GameObject.UpdateAll();
+        GameObject.UpdateAll(timeStamp);
         GameObject.DrawAll();
         return true;
     };

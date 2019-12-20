@@ -15,7 +15,7 @@ class Main extends eui.UILayer
  
     tickLoop(timeStamp:number):boolean
     {
-        GameObject.UpdateAll();
+        GameObject.UpdateAll(timeStamp);
         GameObject.DrawAll();
         return true;
     }

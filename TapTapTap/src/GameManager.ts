@@ -10,10 +10,9 @@
 	private NowStatus : GameStatus =GameStatus.MainGame;
 	private Score :number = 0;
 	private ScoreTex:TextComp=null;
-	private EmitTime:number =500;
-	private EmitCount:number =0;
+	private EmitTime:number =1000;
 	private TotalEmitCount:number =0;
-	private Time:egret.Timer;
+	private EmitTimer:egret.Timer;
 	private static Instance:GameManager=null;
 
 	private Head:Rect;
@@ -36,8 +35,8 @@
 	{
 		super();
 		GameManager.Instance=this;
-		this.Time=new egret.Timer(this.EmitTime,0);
-        this.Time.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
+		this.EmitTimer=new egret.Timer(this.EmitTime,0);
+        this.EmitTimer.addEventListener(egret.TimerEvent.TIMER,this.EmitTarget,this);
 		this.GameInit();
 		this.Object.touchEnabled=true;
 
@@ -58,10 +57,9 @@
 	{
 		this.NowStatus =GameStatus.Title;
 		this.Score=0;
-		this.EmitTime=500;
-		this.EmitCount=0;
+		this.EmitTime=1000;
 		this.TotalEmitCount=0;
-		this.Time.delay=this.EmitTime;
+		this.EmitTimer.delay=this.EmitTime;
 
 		let Targets:GameObject[] =GameObject.FindObjects("Target");
 		Targets.forEach(Obj=>Obj.Destroy());
@@ -106,7 +104,7 @@
 		this.NowStatus=GameStatus.MainGame;
 		this.TitleWindow.OnDestroy();
 		this.TitleWindow=null;
-        this.Time.start();
+        this.EmitTimer.start();
 	}
 
 	public AddScore(AddValue:number)
@@ -134,7 +132,7 @@
 				Obj.Destroy();});
 			this.Button=new AllScreenButtonComp(720/2,1280/2 + 400);
 			this.Window=new WindowComp("SCORE",this.Score.toFixed(),720/2,1280/2);
-			this.Time.stop();
+			this.EmitTimer.stop();
 		}
 		this.NowStatus=Status;
 	}
@@ -146,7 +144,7 @@
 			return;
 		}
 
-		if(GameManager.GetRandomInt(1,2)%2==1)
+		if(GameManager.GetRandomInt(1,5)<4)
 		{
 			if(this.TotalEmitCount>=50&&this.TotalEmitCount%6==0)
 			{
@@ -169,11 +167,12 @@
 			}
 		}
 		
-		this.EmitCount++;
 		this.TotalEmitCount++;
     }
 
-	    static GetRandomInt(Min:number, Max:number):number 
+
+
+	static GetRandomInt(Min:number, Max:number):number 
 	{
         return Math.floor( Min + Math.random() * (Max+0.999 - Min) );
     }

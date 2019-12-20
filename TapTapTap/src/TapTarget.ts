@@ -15,8 +15,8 @@ class TapTarget extends Circle
 		this.PosX=SetPosX;
 		this.PosY=SetPosY;
 
-		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
-		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
+		this.PosX=Utility.GetRandomInt(100.0,620.0);
+		this.Speed=Utility.GetRandom(0.3,1.5);
 		this.Alpha=1;
 		this.SetIndexNum(-1);
 
@@ -30,14 +30,14 @@ class TapTarget extends Circle
 		this.Height = egret.MainContext.instance.stage.stageHeight;
 		this.Width  = egret.MainContext.instance.stage.stageWidth;
 		this.Object.touchEnabled=true;
-		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 	}
 
 	TapEvent()
 	{
 		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
-		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
@@ -54,7 +54,7 @@ class TapTarget extends Circle
 		}
 		if(this.PosY>200)
 		{
-			this.PosY-=this.Speed;
+		this.PosY-=this.Speed*GameObject.FixedTime;
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
 		}
@@ -67,14 +67,21 @@ class TapTarget extends Circle
 
 	OnDestroy()
 	{
-		this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		super.OnDestroy();
 	};
 
-    static GetRandomInt(Min:number, Max:number):number 
+	DrawCircle()
 	{
-        return Math.floor( Min + Math.random() * (Max+0.999 - Min) );
-    }
+		let Graphics = this.Shape.graphics;
+		Graphics.clear();
+		Graphics.beginFill(this.Color,this.Alpha);
+		Graphics.drawCircle(0,0,85);
+		Graphics.endFill();
+		Graphics.beginFill(0x000000,0);
+		Graphics.drawCircle(0,0,110);
+		Graphics.endFill();
+	}
 }
 
 class TapTarget_2 extends Circle
@@ -94,8 +101,8 @@ class TapTarget_2 extends Circle
 		this.PosX=SetPosX;
 		this.PosY=SetPosY;
 		this.BaseX=SetPosX;
-		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
-		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
+		this.PosX=Utility.GetRandomInt(100.0,620.0);
+		this.Speed=Utility.GetRandom(0.3,1.5);
 		this.Alpha=1;
 		this.SetIndexNum(-1);
 		this.Object.x=this.PosX;
@@ -108,14 +115,14 @@ class TapTarget_2 extends Circle
 		this.Height = egret.MainContext.instance.stage.stageHeight;
 		this.Width  = egret.MainContext.instance.stage.stageWidth;
 		this.Object.touchEnabled=true;
-		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 	}
 
 	TapEvent()
 	{
 		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
-		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
@@ -132,8 +139,8 @@ class TapTarget_2 extends Circle
 		}
 		if(this.PosY>200)
 		{
-			this.PosY-=this.Speed;
-			egret.Tween.get(this,{loop:true}).to({PosX:this.BaseX-100}, 500).to({PosX:this.BaseX}, 500).to({PosX:this.BaseX+100}, 500).to({PosX:this.BaseX}, 500);
+			this.PosY-=this.Speed*GameObject.FixedTime;
+			egret.Tween.get(this,{loop:true}).to({PosX:this.BaseX-100}, 500).to({PosX:this.BaseX+100}, 500).to({PosX:this.BaseX+100}, 500).to({PosX:this.BaseX-100}, 500);
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
 		}
@@ -146,14 +153,21 @@ class TapTarget_2 extends Circle
 
 	OnDestroy()
 	{
-		this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		super.OnDestroy();
 	};
 
-    static GetRandomInt(Min:number, Max:number):number 
+	DrawCircle()
 	{
-        return Math.floor( Min + Math.random() * (Max+0.999 - Min) );
-    }
+		let Graphics = this.Shape.graphics;
+		Graphics.clear();
+		Graphics.beginFill(this.Color,this.Alpha);
+		Graphics.drawCircle(0,0,85);
+		Graphics.endFill();
+		Graphics.beginFill(0x000000,0);
+		Graphics.drawCircle(0,0,110);
+		Graphics.endFill();
+	}
 }
 
 class DummyTarget extends Circle
@@ -169,14 +183,14 @@ class DummyTarget extends Circle
 		this.PosX=SetPosX;
 		this.PosY=SetPosY;
 		this.SetIndexNum(-1);
-		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
-		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
+		this.PosX=Utility.GetRandomInt(100.0,620.0);
+		this.Speed=Utility.GetRandom(0.3,1.5);
 		this.Alpha=1;
 		this.Color=0xd8574a;
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
 		this.DrawCircle();
-		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 	}
 
 	TargetInit()
@@ -190,7 +204,7 @@ class DummyTarget extends Circle
 	{
 		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
-		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
@@ -207,7 +221,7 @@ class DummyTarget extends Circle
 		}
 		if(this.PosY>200)
 		{
-			this.PosY-=this.Speed;
+		this.PosY-=this.Speed*GameObject.FixedTime;
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
 		}
@@ -225,10 +239,6 @@ class DummyTarget extends Circle
 		super.OnDestroy();
 	};
 
-    static GetRandomInt(Min:number, Max:number):number 
-	{
-        return Math.floor( Min + Math.random() * (Max+0.999 - Min) );
-    }
 }
 
 class DummyTarget_2 extends Circle
@@ -249,14 +259,14 @@ class DummyTarget_2 extends Circle
 		this.PosY=SetPosY;
 		this.Color=0xd8574a;
 		this.SetIndexNum(-1);
-		this.PosX=TapTarget.GetRandomInt(100.0,620.0);
-		this.Speed=TapTarget.GetRandomInt(3.0,17.0);
+		this.PosX=Utility.GetRandomInt(100.0,620.0);
+		this.Speed=Utility.GetRandom(0.3,1.5);
 		this.Alpha=1;
 
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
 		this.DrawCircle();
-		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 	}
 
 	TargetInit()
@@ -270,7 +280,7 @@ class DummyTarget_2 extends Circle
 	{
 		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.MainGame)
 		{
-		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
@@ -286,8 +296,8 @@ class DummyTarget_2 extends Circle
 		}
 		if(this.PosY>200)
 		{
-			this.PosY-=this.Speed;
-			egret.Tween.get(this,{loop:true}).to({PosX:this.BaseX-100}, 500).to({PosX:this.BaseX}, 500).to({PosX:this.BaseX+100}, 500).to({PosX:this.BaseX}, 500);
+			this.PosY-=this.Speed*GameObject.FixedTime;
+		egret.Tween.get(this,{loop:true}).to({PosX:this.BaseX-100}, 500).to({PosX:this.BaseX+100}, 500).to({PosX:this.BaseX+100}, 500).to({PosX:this.BaseX-100}, 500);
 		this.Object.x=this.PosX;
 		this.Object.y=this.PosY;
 		}
@@ -301,14 +311,10 @@ class DummyTarget_2 extends Circle
 
 	OnDestroy()
 	{
-		this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		super.OnDestroy();
 	};
 
-    static GetRandomInt(Min:number, Max:number):number 
-	{
-        return Math.floor( Min + Math.random() * (Max+0.999 - Min) );
-    }
 }
 
 class ButtonComp extends Rect
@@ -334,14 +340,14 @@ class ButtonComp extends Rect
 	TargetInit()
 	{
 		this.Object.touchEnabled=true;
-		this.Object.addEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 	}
 
 	TapEvent()
 	{
 		if(GameManager.GetInstance().GetGameStatus()!=GameStatus.Result)
 		{
-		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		  this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		  return;
 		}
 		egret.log("TAP!!!!");
@@ -354,7 +360,7 @@ class ButtonComp extends Rect
 
 	OnDestroy()
 	{
-		this.Object.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.TapEvent,this);
+		this.Object.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.TapEvent,this);
 		this.TargetImage.OnDestroy();
 		super.OnDestroy();
 	};

@@ -8,6 +8,9 @@ abstract class GameObject
 	protected Object: egret.DisplayObjectContainer = null;
 	protected Tag : string="Default";
 
+	protected static Time:number;
+	protected static FixedTime:number;
+
     constructor()
 	{
 		this.Object=new egret.DisplayObjectContainer();
@@ -19,10 +22,15 @@ abstract class GameObject
 	{
 		GameObject.Objects=[];
 		GameObject.Display=TargetDisplayOC;
+		GameObject.Time=0;
+		GameObject.FixedTime=0;
     }
  
-    static UpdateAll()
+    static UpdateAll(timeStamp:number)
     {
+		GameObject.FixedTime=timeStamp-GameObject.Time;
+		GameObject.Time=timeStamp;
+		console.log("Fixed",GameObject.FixedTime.toFixed());
        GameObject.Objects.forEach(Obj=>Obj.Update());
 	   GameObject.Objects=GameObject.Objects.filter(Obj=>{
 		   								if(Obj.DestroyFlag==true)

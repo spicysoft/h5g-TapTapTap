@@ -16,6 +16,7 @@
 		"bin-debug/GameManager.js",
 		"bin-debug/Main.js",
 		"bin-debug/TapTarget.js",
-		"bin-debug/UICompornent.js"
+		"bin-debug/UICompornent.js",
+		"bin-debug/Utility.js"
 	]
 }

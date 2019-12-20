@@ -21,12 +21,11 @@ var GameManager = (function (_super) {
         _this.NowStatus = GameStatus.MainGame;
         _this.Score = 0;
         _this.ScoreTex = null;
-        _this.EmitTime = 500;
-        _this.EmitCount = 0;
+        _this.EmitTime = 1000;
         _this.TotalEmitCount = 0;
         GameManager.Instance = _this;
-        _this.Time = new egret.Timer(_this.EmitTime, 0);
-        _this.Time.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
+        _this.EmitTimer = new egret.Timer(_this.EmitTime, 0);
+        _this.EmitTimer.addEventListener(egret.TimerEvent.TIMER, _this.EmitTarget, _this);
         _this.GameInit();
         _this.Object.touchEnabled = true;
         _this.Head = new Rect(0, 0, 1280, 60);
@@ -49,10 +48,9 @@ var GameManager = (function (_super) {
     GameManager.prototype.GameInit = function () {
         this.NowStatus = GameStatus.Title;
         this.Score = 0;
-        this.EmitTime = 500;
-        this.EmitCount = 0;
+        this.EmitTime = 1000;
         this.TotalEmitCount = 0;
-        this.Time.delay = this.EmitTime;
+        this.EmitTimer.delay = this.EmitTime;
         var Targets = GameObject.FindObjects("Target");
         Targets.forEach(function (Obj) { return Obj.Destroy(); });
         this.TitleWindow = new TitleWindowComp(720 / 2, 1280 / 2 - 100);
@@ -86,7 +84,7 @@ var GameManager = (function (_super) {
         this.NowStatus = GameStatus.MainGame;
         this.TitleWindow.OnDestroy();
         this.TitleWindow = null;
-        this.Time.start();
+        this.EmitTimer.start();
     };
     GameManager.prototype.AddScore = function (AddValue) {
         this.Score += AddValue;
@@ -108,7 +106,7 @@ var GameManager = (function (_super) {
             });
             this.Button = new AllScreenButtonComp(720 / 2, 1280 / 2 + 400);
             this.Window = new WindowComp("SCORE", this.Score.toFixed(), 720 / 2, 1280 / 2);
-            this.Time.stop();
+            this.EmitTimer.stop();
         }
         this.NowStatus = Status;
     };
@@ -116,7 +114,7 @@ var GameManager = (function (_super) {
         if (this.NowStatus != GameStatus.MainGame) {
             return;
         }
-        if (GameManager.GetRandomInt(1, 2) % 2 == 1) {
+        if (GameManager.GetRandomInt(1, 5) < 4) {
             if (this.TotalEmitCount >= 50 && this.TotalEmitCount % 6 == 0) {
                 new TapTarget_2(MainGame.Width / 2, MainGame.Height);
             }
@@ -132,7 +130,6 @@ var GameManager = (function (_super) {
                 new DummyTarget(MainGame.Width / 2, MainGame.Height);
             }
         }
-        this.EmitCount++;
         this.TotalEmitCount++;
     };
     GameManager.GetRandomInt = function (Min, Max) {

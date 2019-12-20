@@ -14,8 +14,13 @@ var GameObject = (function () {
     GameObject.Init = function (TargetDisplayOC) {
         GameObject.Objects = [];
         GameObject.Display = TargetDisplayOC;
+        GameObject.Time = 0;
+        GameObject.FixedTime = 0;
     };
-    GameObject.UpdateAll = function () {
+    GameObject.UpdateAll = function (timeStamp) {
+        GameObject.FixedTime = timeStamp - GameObject.Time;
+        GameObject.Time = timeStamp;
+        console.log("Fixed", GameObject.FixedTime.toFixed());
         GameObject.Objects.forEach(function (Obj) { return Obj.Update(); });
         GameObject.Objects = GameObject.Objects.filter(function (Obj) {
             if (Obj.DestroyFlag == true) {
